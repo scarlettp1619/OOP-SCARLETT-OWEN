@@ -14,7 +14,6 @@ import cycling.MiniCyclingPortalInterface;
  * @version 1.0
  */
 public class CyclingPortalInterfaceTestApp {
-
 	/**
 	 * Test method.
 	 * 

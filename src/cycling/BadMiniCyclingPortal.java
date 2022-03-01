@@ -3,6 +3,7 @@ package cycling;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.*;
 
 /**
  * BadMiniCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -13,34 +14,41 @@ import java.time.LocalTime;
  *
  */
 public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
+	
+	HashMap<Integer, Race> races = new HashMap<Integer, Race>();
+	
+	//FUCK WE NEED HASHMAPS TO MAP IDS TO OBJECTS FOR EASY SEARCHING SO WE DONT NEED BGI RUNTIME COMPLEXITIES
 
 	@Override
 	public int[] getRaceIds() {
-		// TODO Auto-generated method stub
+		// Loop through races[] and return an array of raceIds
 		return null;
 	}
 
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
-		// TODO Auto-generated method stub
+		// Single line code to create race then add to the array of races[]
 		return 0;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		// Format string to be returned of all the get methods of race class
 		return null;
 	}
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		/* Loop through races[] to find the ID of the race that needs to be removed, then remove it
+   		 * Remove the results from the race along with it (further elaboration)
+		 * Results are stored with the riders
+		 * addResults() -----
+		 */ 
 	}
 
 	@Override
 	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		// loop to search race from raceID, then a simple get method from Race[] class
 		return 0;
 	}
 
@@ -48,25 +56,27 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
 			StageType type)
 			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		// TODO Auto-generated method stub
+		// in the race class we need a Stage[] and a addStage method then just construct from there, call method here
 		return 0;
 	}
 
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		// search race, then loop through the Stage[] in the race then return stageIDs (need getID method inside the Stage.java class)
 		return null;
 	}
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		// loop through races and then try to get stageID with the hashmap object in race object, then return the length (km)
 		return 0;
 	}
 
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		/* same search as method above
+		 * result removal (elaboration needed)
+		 */
 
 	}
 
@@ -74,20 +84,20 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	public int addCategorizedClimbToStage(int stageId, Double location, SegmentType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		// TODO Auto-generated method stub
+		// add climb segment with constructor method to stages, use hashmap bs yadda yadda
 		return 0;
 	}
 
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		// TODO Auto-generated method stub
+		// add intermediate sprint segment with constructor method to stages, same thing as climb segment
 		return 0;
 	}
 
 	@Override
 	public void removeSegment(int segmentId) throws IDNotRecognisedException, InvalidStageStateException {
-		// TODO Auto-generated method stub
+		// same as remove stages method but again more loops and hashmaps
 
 	}
 

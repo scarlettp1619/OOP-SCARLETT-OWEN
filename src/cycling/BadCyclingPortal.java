@@ -13,8 +13,8 @@ import java.time.LocalTime;
  * @version 1.0
  *
  */
+@SuppressWarnings("serial")
 public class BadCyclingPortal implements CyclingPortalInterface {
-
 	@Override
 	public int[] getRaceIds() {
 		// TODO Auto-generated method stub
