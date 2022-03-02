@@ -7,7 +7,7 @@ public class Segment {
 	double segmentLength;
 	double avgGradient;
 	
-	public Segment(double loc, SegmentType type, double aGrad, double length){
+	public Segment(Double loc, SegmentType type, Double aGrad, Double length){
 		segmentLocation = loc;
 		segmentType = type;
 		avgGradient = aGrad;
