@@ -15,5 +15,7 @@ public class Stage {
 		stageDescription = description;
 		stageLength = length;
 		stageStartTime= startTime;
+		System.out.println("Stage has been constructed.");
 	}
+	
 }

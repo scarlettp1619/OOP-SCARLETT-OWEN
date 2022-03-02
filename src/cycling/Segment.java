@@ -12,5 +12,6 @@ public class Segment {
 		segmentType = type;
 		avgGradient = aGrad;
 		segmentLength = length;
+		System.out.println("Segment has been constructed.");
 	}
 }

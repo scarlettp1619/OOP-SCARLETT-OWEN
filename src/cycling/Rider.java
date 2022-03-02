@@ -7,5 +7,7 @@ public class Rider {
 	public Rider(String name, int yob) {
 		riderName = name;
 		yearOfBirth = yob;
+		System.out.println("Rider has been constructed.");
 	}
+	
 }

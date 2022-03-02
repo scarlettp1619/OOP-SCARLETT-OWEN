@@ -8,5 +8,6 @@ public class Team {
 		teamName = name;
 		teamDescription = description;
 		
+		System.out.println("Team has been constructed.");
 	}
 }

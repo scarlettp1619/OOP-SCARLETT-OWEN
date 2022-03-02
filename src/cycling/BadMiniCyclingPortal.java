@@ -13,33 +13,42 @@ import java.util.*;
  * @version 1.0
  *
  */
+@SuppressWarnings("serial")
 public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	
-	//HashMap<int, Race> racesID = new HashMap<int, Race>();
+	HashMap<Integer, Race> races = new HashMap<Integer, Race>();
+	int raceIdCounter = 0;
 	
 	
 	//FUCK WE NEED HASHMAPS TO MAP IDS TO OBJECTS FOR EASY SEARCHING SO WE DONT NEED BGI RUNTIME COMPLEXITIES
 
 	@Override
 	public int[] getRaceIds() {
-		// Loop through races[] and return an array of raceIds
-		return null;
+		int[] raceIds = new int[races.size()];
+		for (int i : races.keySet()){
+			raceIds[i] = i;
+		}
+		return raceIds;
 	}
 
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
-		// Single line code to create race then add to the array of races[]
-		return 0;
+		Race tempRace = new Race(name, description);
+		races.put(raceIdCounter, tempRace);
+		raceIdCounter++;
+		return raceIdCounter-1;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
-		// Format string to be returned of all the get methods of race class
-		return null;
+		Race tempRace = races.get(raceId);
+		return tempRace.getDescription();
 	}
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
+		races.remove(raceId);
+		raceIdCounter--;
 		/* Loop through races[] to find the ID of the race that needs to be removed, then remove it
    		 * Remove the results from the race along with it (further elaboration)
 		 * Results are stored with the riders
@@ -54,22 +63,32 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	}
 
 	@Override
-	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
-			StageType type)
-			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		// in the race class we need a Stage[] and a addStage method then just construct from there, call method here
-		return 0;
+	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type) throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
+		Race tempRace = races.get(raceId);
+		int returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
+		races.put(raceId, tempRace);
+		return returnStageId;
 	}
 
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
-		// search race, then loop through the Stage[] in the race then return stageIDs (need getID method inside the Stage.java class)
-		return null;
+		Race tempRace = races.get(raceId);
+		HashMap<Integer, Stage> stages = tempRace.getStages();
+		int[] stageIds = new int[stages.size()];
+		for (int i : stages.keySet()) {
+			stageIds[i] = i;
+		}
+		return stageIds;
 	}
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
 		// loop through races and then try to get stageID with the hashmap object in race object, then return the length (km)
+		for (Race r : races.values()) {
+			HashMap<Integer, Stage> sHash = r.getStages();
+			Stage stage = sHash.get(stageId);
+			//incomplete
+		}
 		return 0;
 	}
 
