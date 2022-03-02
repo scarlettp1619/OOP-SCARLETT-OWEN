@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	
-	HashMap<int, Race> racesID = new HashMap<int, Race>();
+	//HashMap<int, Race> racesID = new HashMap<int, Race>();
 	
 	
 	//FUCK WE NEED HASHMAPS TO MAP IDS TO OBJECTS FOR EASY SEARCHING SO WE DONT NEED BGI RUNTIME COMPLEXITIES
