@@ -10,4 +10,15 @@ public class Rider {
 		System.out.println("Rider has been constructed.");
 	}
 	
+	//Name
+	public String getRiderName() {
+		return riderName;
+	}
+	
+	
+	//YOB
+	public int getYOB() {
+		return yearOfBirth;
+	}
+	
 }

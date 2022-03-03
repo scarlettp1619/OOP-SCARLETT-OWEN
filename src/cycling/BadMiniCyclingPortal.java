@@ -19,6 +19,8 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	HashMap<Integer, Race> races = new HashMap<Integer, Race>();
 	int raceIdCounter = 0;
 	
+	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
+	int teamIdCounter = 0;
 	
 	//FUCK WE NEED HASHMAPS TO MAP IDS TO OBJECTS FOR EASY SEARCHING SO WE DONT NEED BGI RUNTIME COMPLEXITIES
 
