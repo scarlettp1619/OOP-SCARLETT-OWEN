@@ -1,5 +1,8 @@
 package cycling;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 /**
  * Thrown when attempting to use an ID that does not exit in the system.
  * 
@@ -23,6 +26,15 @@ public class IDNotRecognisedException extends Exception {
 	 */
 	public IDNotRecognisedException(String message) {
 		super(message);
+	}
+	
+	static void checkID(int raceId, int[] raceIds) throws IDNotRecognisedException {
+		boolean containsID = IntStream.of(raceIds).anyMatch(x -> x == raceId);
+		for (int i = 0; i <= raceIds.length - 1; i++) {
+			if (!containsID) {
+				throw new IDNotRecognisedException("ID \"" + raceId + "\" does not match any race IDs!");
+			}
+		}
 	}
 
 }

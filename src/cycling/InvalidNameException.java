@@ -11,6 +11,8 @@ package cycling;
  */
 public class InvalidNameException extends Exception {
 
+	static String checkName;
+	
 	/**
 	 * Constructs an instance of the exception with no message
 	 */
@@ -27,4 +29,9 @@ public class InvalidNameException extends Exception {
 		super(message);
 	}
 
+	static void checkName(String type, String name) throws InvalidNameException {
+		if (name == null || name.length() > 30 || name.isEmpty() || name.contains(" ")) {
+				throw new InvalidNameException(type +  " name \"" + name + "\" is invalid!");
+		}
+	}
 }

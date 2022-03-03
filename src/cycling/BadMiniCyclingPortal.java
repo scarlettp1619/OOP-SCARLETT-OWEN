@@ -3,7 +3,8 @@ package cycling;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * BadMiniCyclingPortal is a minimally compiling, but non-functioning implementor
@@ -21,8 +22,6 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	
 	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
 	int teamIdCounter = 0;
-	
-	//FUCK WE NEED HASHMAPS TO MAP IDS TO OBJECTS FOR EASY SEARCHING SO WE DONT NEED BGI RUNTIME COMPLEXITIES
 
 	@Override
 	public int[] getRaceIds() {
@@ -37,51 +36,97 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
-		Race tempRace = new Race(name, description);
-		races.put(raceIdCounter, tempRace);
-		raceIdCounter++;
+		try {
+			Race tempRace = new Race(name, description);
+			IllegalNameException.checkRaceName(name, getRaceIds(), races);
+			InvalidNameException.checkName("Race", name);
+			races.put(raceIdCounter, tempRace);
+			raceIdCounter++;
+			System.out.println("Race \"" + name + "\" successfully constructed.");
+		} catch (IllegalNameException ex) {
+			System.out.println(ex);
+		} catch (InvalidNameException ex) {
+			System.out.println(ex);
+		}
 		return raceIdCounter-1;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
-		Race tempRace = races.get(raceId);
-		return tempRace.getDescription();
+		String details = null;
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			Race tempRace = races.get(raceId);
+			details = tempRace.getDescription();
+		} catch (IDNotRecognisedException ex) {
+			System.out.println(ex);
+		}
+		return details;
 	}
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
-		races.remove(raceId);
-		raceIdCounter--;
-		/* Loop through races[] to find the ID of the race that needs to be removed, then remove it
-   		 * Remove the results from the race along with it (further elaboration)
-		 * Results are stored with the riders
-		 * addResults() -----
-		 */ 
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			races.remove(raceId);
+			raceIdCounter--;
+			/* Remove race ID from hash map, decrement ID counter
+	   		 * Remove the results from the race along with it (further elaboration)
+			 * Results are stored with the riders
+			 * addResults() ----- */
+		} catch (IDNotRecognisedException ex) {
+			System.out.println(ex);
+		} 
 	}
 
 	@Override
 	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
+		int stages = -1;
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			Race tempRace = races.get(raceId);
+			stages = tempRace.getStageIds().length;
+		} catch (IDNotRecognisedException ex) {
+			System.out.println(ex);
+		}
 		// loop to search race from raceID, then a simple get method from Race[] class
-		return 0;
+		return stages;
 	}
 
 	@Override
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type) throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		Race tempRace = races.get(raceId);
-		int returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
-		races.put(raceId, tempRace);
+		int returnStageId = -1;
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			IllegalNameException.checkStageName(stageName, raceId, races);
+			InvalidNameException.checkName("Stage", stageName);
+			InvalidLengthException.checkLength(length);
+			Race tempRace = races.get(raceId);
+			returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
+			races.put(raceId, tempRace);
+		} catch (IDNotRecognisedException ex){
+			System.out.println(ex);
+		} catch (IllegalNameException ex) {
+			System.out.println(ex);
+		} catch (InvalidNameException ex) {
+			System.out.println(ex);
+		} catch (InvalidLengthException ex) {
+			System.out.println(ex);
+		}
 		return returnStageId;
 	}
 
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
-		Race tempRace = races.get(raceId);
-		HashMap<Integer, Stage> stages = tempRace.getStages();
-		int[] stageIds = new int[stages.size()];
-		for (int i : stages.keySet()) {
-			stageIds[i] = i;
+		int[] stageIds = {};
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			Race tempRace = races.get(raceId);
+			stageIds = tempRace.getStageIds();
+		} catch(IDNotRecognisedException ex) {
+			System.out.println(ex);
 		}
+		
 		return stageIds;
 	}
 

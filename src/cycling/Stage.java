@@ -70,7 +70,7 @@ public class Stage {
 		return segments.get(segmentId);
 	}
 	
-	public int[] getSegmentId() {
+	public int[] getSegmentIds() {
 		int[] segmentIds = new int[segments.size()];
 		int counter = 0;
 		for (int i : segments.keySet()){

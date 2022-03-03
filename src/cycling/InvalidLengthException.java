@@ -24,5 +24,11 @@ public class InvalidLengthException extends Exception {
 	public InvalidLengthException(String message) {
 		super(message);
 	}
+	
+	static void checkLength(double length) throws InvalidLengthException{
+		if (length < 5.0) {
+			throw new InvalidLengthException("Stage length of \"" + length + "\" is too short!");
+		}
+	}
 
 }

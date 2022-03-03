@@ -34,7 +34,7 @@ public class Race {
 		return stages.get(stageId);
 	}
 	
-	public int[] getStagesId() {
+	public int[] getStageIds() {
 		int[] stageIds = new int[stages.size()];
 		int counter = 0;
 		for (int i : stages.keySet()){
@@ -48,14 +48,20 @@ public class Race {
 		return stages;
 	}
 
-	
-	//Descriptors
 	public void setDescription(String des) {
 		raceDescriptor = des;
 	}
 	
 	public String getDescription() {
 		return raceDescriptor;
+	}
+	
+	public void setName(String name) {
+		raceName = name;
+	}
+	
+	public String getName() {
+		return raceName;
 	}
 	
 }
