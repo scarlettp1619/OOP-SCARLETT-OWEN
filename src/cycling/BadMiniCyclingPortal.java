@@ -25,8 +25,10 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	@Override
 	public int[] getRaceIds() {
 		int[] raceIds = new int[races.size()];
+		int counter = 0;
 		for (int i : races.keySet()){
-			raceIds[i] = i;
+			raceIds[counter] = i;
+			counter++;
 		}
 		return raceIds;
 	}
