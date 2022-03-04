@@ -37,16 +37,14 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
-			Race tempRace = new Race(name, description);
 			IllegalNameException.checkRaceName(name, getRaceIds(), races);
 			InvalidNameException.checkName("Race", name);
+			Race tempRace = new Race(name, description);
 			races.put(raceIdCounter, tempRace);
 			raceIdCounter++;
 			System.out.println("Race \"" + name + "\" successfully constructed.");
-		} catch (IllegalNameException ex) {
-			System.out.println(ex);
-		} catch (InvalidNameException ex) {
-			System.out.println(ex);
+		} catch (IllegalNameException | InvalidNameException e) {
+			System.out.println(e);
 		}
 		return raceIdCounter-1;
 	}
@@ -58,8 +56,8 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			IDNotRecognisedException.checkID(raceId, getRaceIds());
 			Race tempRace = races.get(raceId);
 			details = tempRace.getDescription();
-		} catch (IDNotRecognisedException ex) {
-			System.out.println(ex);
+		} catch (IDNotRecognisedException e) {
+			System.out.println(e);
 		}
 		return details;
 	}
@@ -74,8 +72,8 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	   		 * Remove the results from the race along with it (further elaboration)
 			 * Results are stored with the riders
 			 * addResults() ----- */
-		} catch (IDNotRecognisedException ex) {
-			System.out.println(ex);
+		} catch (IDNotRecognisedException e) {
+			System.out.println(e);
 		} 
 	}
 
@@ -86,10 +84,9 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			IDNotRecognisedException.checkID(raceId, getRaceIds());
 			Race tempRace = races.get(raceId);
 			stages = tempRace.getStageIds().length;
-		} catch (IDNotRecognisedException ex) {
-			System.out.println(ex);
+		} catch (IDNotRecognisedException e) {
+			System.out.println(e);
 		}
-		// loop to search race from raceID, then a simple get method from Race[] class
 		return stages;
 	}
 
@@ -104,14 +101,8 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			Race tempRace = races.get(raceId);
 			returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
 			races.put(raceId, tempRace);
-		} catch (IDNotRecognisedException ex){
-			System.out.println(ex);
-		} catch (IllegalNameException ex) {
-			System.out.println(ex);
-		} catch (InvalidNameException ex) {
-			System.out.println(ex);
-		} catch (InvalidLengthException ex) {
-			System.out.println(ex);
+		} catch (IDNotRecognisedException | IllegalNameException | InvalidNameException | InvalidLengthException e){
+			System.out.println(e);
 		}
 		return returnStageId;
 	}
@@ -123,51 +114,83 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			IDNotRecognisedException.checkID(raceId, getRaceIds());
 			Race tempRace = races.get(raceId);
 			stageIds = tempRace.getStageIds();
-		} catch(IDNotRecognisedException ex) {
-			System.out.println(ex);
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
 		}
-		
 		return stageIds;
 	}
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		// loop through races and then try to get stageID with the hashmap object in race object, then return the length (km)
+		double stageLength = 0;
 		for (Race r : races.values()) {
-			HashMap<Integer, Stage> sHash = r.getStages();
-			Stage stage = sHash.get(stageId);
-			//incomplete
+			try {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				HashMap<Integer, Stage> stages = r.getStages();
+				Stage tempStage = stages.get(stageId);
+				stageLength = tempStage.getStageLength();
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
+			}
 		}
-		return 0;
+		return stageLength;
 	}
 
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		/* same search as method above
-		 * result removal (elaboration needed)
-		 */
-
+		for (Race r : races.values()) {
+			try {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				r.removeStage(stageId);
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
+			}
+		}
 	}
 
 	@Override
 	public int addCategorizedClimbToStage(int stageId, Double location, SegmentType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		// add climb segment with constructor method to stages, use hashmap bs yadda yadda
-		return 0;
+		int segmentId = 0;
+		for (Race r : races.values()) {
+			try {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage tempStage = r.getStage(stageId);
+				segmentId = tempStage.addSegment(location, type, averageGradient, length);
+				r.stages.put(stageId, tempStage);
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
+			}
+		}
+		return segmentId;
 	}
 
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		// add intermediate sprint segment with constructor method to stages, same thing as climb segment
-		return 0;
+		int segmentId = 0;
+		for (Race r : races.values()) {
+			try {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage tempStage = r.getStage(stageId);
+				segmentId = tempStage.addSprint(location);
+				r.stages.put(stageId, tempStage);
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
+			}
+		}
+		return segmentId;
 	}
 
 	@Override
 	public void removeSegment(int segmentId) throws IDNotRecognisedException, InvalidStageStateException {
 		// same as remove stages method but again more loops and hashmaps
-
+		for (Race r : races.values()) {
+			for (Stage s : r.getStages().values()) {
+				//incomplete
+			}
+		}
 	}
 
 	@Override

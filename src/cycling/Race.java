@@ -63,5 +63,4 @@ public class Race {
 	public String getName() {
 		return raceName;
 	}
-	
 }

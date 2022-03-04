@@ -9,6 +9,7 @@ import cycling.IllegalNameException;
 import cycling.InvalidLengthException;
 import cycling.InvalidNameException;
 import cycling.MiniCyclingPortalInterface;
+import cycling.StageType;
 
 /**
  * A short program to illustrate an app testing some minimal functionality of a
@@ -41,12 +42,13 @@ public class CyclingPortalInterfaceTestApp {
 	
 		// portal.createRace("name of whatever", "des"); // invalid name
 		portal.createRace("nameofwhatever2", "description of race 0"); // valid name
-		portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, null);
-		portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, null);
+		//portal.removeRaceById(100);
+		portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, StageType.FLAT);
+		portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, StageType.FLAT);
 		//String details = portal.viewRaceDetails(0);
 		//int stages = portal.getNumberOfStages(1);
-		
-		System.out.println(portal.getRaceStages(0));
+		portal.removeStageById(1);
+		System.out.println(portal.getStageLength(1));
 		
 		
 		assert (portal.getRaceIds().length == 0)

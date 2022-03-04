@@ -62,6 +62,13 @@ public class Stage {
 		return segmentIdCounter-1;
 	}
 	
+	public int addSprint(double location) {
+		Segment tempSegment = new Segment(location, SegmentType.SPRINT, 0.0, location);
+		segments.put(segmentIdCounter, tempSegment);
+		segmentIdCounter++;
+		return segmentIdCounter-1;
+	}
+	
 	public void removeSegment(int segmentId) {
 		segments.remove(segmentId);
 	}
