@@ -42,7 +42,6 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			Race tempRace = new Race(name, description);
 			races.put(raceIdCounter, tempRace);
 			raceIdCounter++;
-			System.out.println("Race \"" + name + "\" successfully constructed.");
 		} catch (IllegalNameException | InvalidNameException e) {
 			System.out.println(e);
 		}
@@ -195,8 +194,11 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
-		// TODO Auto-generated method stub
-
+		for (Race r : races.values()) {
+			Stage tempStage = r.getStage(stageId);
+			tempStage.setStageState(StageState.WAITING_FOR_RESULTS);
+			r.stages.put(stageId, tempStage);
+		}
 	}
 
 	@Override

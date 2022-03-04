@@ -14,7 +14,7 @@ public class Race {
 	public Race(String name, String descriptor){
 		raceName = name;
 		raceDescriptor = descriptor;
-		System.out.println("Race has been constructed. Name: " + name + ", Description: " + descriptor);
+		System.out.println("Race has been constructed. " + this);
 	}
 	
 	
@@ -62,5 +62,12 @@ public class Race {
 	
 	public String getName() {
 		return raceName;
+	}
+	
+	//toString
+	@Override
+	public String toString() {
+		String str = String.format("Name: %s, Description: %s", raceName, raceDescriptor);
+		return str;
 	}
 }

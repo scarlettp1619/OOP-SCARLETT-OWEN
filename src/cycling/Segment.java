@@ -12,7 +12,7 @@ public class Segment {
 		segmentType = type;
 		avgGradient = aGrad;
 		segmentLength = length;
-		System.out.println("Segment has been constructed.");
+		System.out.println("Segment has been constructed. " + this);
 	}
 	
 		//Type
@@ -52,5 +52,11 @@ public class Segment {
 		
 		public void setAverageGradient(double aGrad) {
 			avgGradient = aGrad;
+		}
+		
+		@Override
+		public String toString() {
+			String str = String.format("Type: %s, Location: %f, Length: %f, AverageGradient: %f", segmentType, segmentLocation, segmentLength, avgGradient);
+			return str;
 		}
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 public class Stage {
 	
+	StageState stageState = StageState.UNDER_PREPARATION;
+	
 	StageType stageType;
 	String stageName;
 	String stageDescription;
@@ -21,7 +23,7 @@ public class Stage {
 		stageDescription = description;
 		stageLength = length;
 		stageStartTime= startTime;
-		System.out.println("Stage has been constructed.");
+		System.out.println("Stage has been constructed. " + this);
 	}
 	
 	
@@ -30,6 +32,14 @@ public class Stage {
 		return stageType;
 	}
 	
+	//State
+	public StageState getStageState() {
+		return stageState;
+	}
+	
+	public void setStageState(StageState state) {
+		stageState = state;
+	}
 	
 	//Name
 	public String getStageName() {
@@ -89,5 +99,12 @@ public class Stage {
 	
 	public HashMap<Integer, Segment> getSegment() {
 		return segments;
+	}
+	
+	//toString
+	@Override
+	public String toString() {
+		String str = String.format("Name: %s, Description: %s, Type: %s, Length: %f, StartTime: %s", stageName, stageDescription, stageType, stageLength, stageStartTime);
+		return str;
 	}
 }
