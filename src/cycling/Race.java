@@ -8,7 +8,7 @@ public class Race {
 	String raceDescriptor;
 	
 	HashMap<Integer, Stage> stages = new HashMap<Integer, Stage>();
-	int stageIdCounter = 0;
+	static int stageIdCounter = 0;
 	
 	//Constructor
 	public Race(String name, String descriptor){

@@ -18,10 +18,10 @@ import java.util.HashMap;
 public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	
 	HashMap<Integer, Race> races = new HashMap<Integer, Race>();
-	int raceIdCounter = 0;
+	static int raceIdCounter = 0;
 	
 	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
-	int teamIdCounter = 0;
+	static int teamIdCounter = 0;
 
 	@Override
 	public int[] getRaceIds() {
@@ -188,7 +188,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		// same as remove stages method but again more loops and hashmaps
 		for (Race r : races.values()) {
 			for (Stage s : r.getStages().values()) {
-				//incomplete
+				s.removeSegment(segmentId);
 			}
 		}
 	}
@@ -201,8 +201,12 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public int[] getStageSegments(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] segIds = null;
+		for (Race r : races.values()) {
+			Stage tempStage = r.getStage(stageId);
+			segIds = tempStage.getSegmentIds();
+		}
+		return segIds;
 	}
 
 	@Override

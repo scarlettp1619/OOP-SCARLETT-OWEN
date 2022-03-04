@@ -11,7 +11,7 @@ public class Stage {
 	LocalDateTime stageStartTime;
 	
 	HashMap<Integer, Segment> segments = new HashMap<Integer, Segment>();
-	int segmentIdCounter = 0;
+	static int segmentIdCounter = 0;
 	
 	
 	//Constructor

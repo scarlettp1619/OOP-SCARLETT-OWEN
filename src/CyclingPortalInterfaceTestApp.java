@@ -7,7 +7,10 @@ import cycling.CyclingPortalInterface;
 import cycling.IDNotRecognisedException;
 import cycling.IllegalNameException;
 import cycling.InvalidLengthException;
+import cycling.InvalidLocationException;
 import cycling.InvalidNameException;
+import cycling.InvalidStageStateException;
+import cycling.InvalidStageTypeException;
 import cycling.MiniCyclingPortalInterface;
 import cycling.StageType;
 
@@ -30,8 +33,11 @@ public class CyclingPortalInterfaceTestApp {
 	 * @throws IllegalNameException 
 	 * @throws IDNotRecognisedException 
 	 * @throws InvalidLengthException 
+	 * @throws InvalidStageTypeException 
+	 * @throws InvalidStageStateException 
+	 * @throws InvalidLocationException 
 	 */
-	public static void main(String[] args) throws IllegalNameException, InvalidNameException, IDNotRecognisedException, InvalidLengthException {
+	public static void main(String[] args) throws IllegalNameException, InvalidNameException, IDNotRecognisedException, InvalidLengthException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
 		System.out.println("The system compiled and started the execution...");
 
 		MiniCyclingPortalInterface portal = new BadMiniCyclingPortal();
@@ -47,8 +53,12 @@ public class CyclingPortalInterfaceTestApp {
 		portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, StageType.FLAT);
 		//String details = portal.viewRaceDetails(0);
 		//int stages = portal.getNumberOfStages(1);
-		portal.removeStageById(1);
-		System.out.println(portal.getStageLength(1));
+		//portal.removeStageById(1);
+		portal.addIntermediateSprintToStage(0, 10);
+		portal.addIntermediateSprintToStage(0, 10);
+		portal.addIntermediateSprintToStage(1, 10);
+		portal.removeSegment(1);
+		System.out.println(Arrays.toString(portal.getStageSegments(1)));
 		
 		
 		assert (portal.getRaceIds().length == 0)
