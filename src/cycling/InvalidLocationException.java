@@ -25,6 +25,12 @@ public class InvalidLocationException extends Exception {
 	public InvalidLocationException(String message) {
 		super(message);
 	}
+	
+	static void checkLocation(Double location, Double stageLength) throws InvalidLocationException {
+		if(location <= 0 || location > stageLength) {
+			throw new InvalidLocationException("Location is invalid");
+		}
+	}
 
 }
 

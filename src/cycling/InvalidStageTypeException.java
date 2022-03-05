@@ -24,5 +24,10 @@ public class InvalidStageTypeException extends Exception {
 	public InvalidStageTypeException(String message) {
 		super(message);
 	}
-
+	
+	static void checkStageType(Stage stage) throws InvalidStageTypeException {
+		if(stage.getStageType() == StageType.TT) {
+			throw new InvalidStageTypeException();
+		}
+	}
 }
