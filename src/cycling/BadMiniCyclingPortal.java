@@ -220,7 +220,13 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
-		teams.remove(teamId);
+		try {
+			IDNotRecognisedException.checkID(teamId, getTeams());
+			teams.remove(teamId);
+		} catch (IDNotRecognisedException e){
+			System.out.println(e);
+		}
+
 	}
 
 	@Override
@@ -237,8 +243,13 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
 		int[] riderIds = {};
-		Team tempTeam = teams.get(teamId);
-		riderIds = tempTeam.getRidersId();
+		try {
+			IDNotRecognisedException.checkID(teamId, getTeams());
+			Team tempTeam = teams.get(teamId);
+			riderIds = tempTeam.getRidersId();
+		} catch (IDNotRecognisedException e) {
+			System.out.println(e);
+		}
 		return riderIds;
 	}
 
@@ -246,9 +257,14 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
 		int returnTeamId = 0;
-		Team tempTeam = teams.get(teamID);
-		returnTeamId = tempTeam.addRider(name, yearOfBirth);
-		teams.put(teamID, tempTeam);
+		try {
+			IDNotRecognisedException.checkID(teamID, getTeams());
+			Team tempTeam = teams.get(teamID);
+			returnTeamId = tempTeam.addRider(name, yearOfBirth);
+			teams.put(teamID, tempTeam);
+		} catch(IDNotRecognisedException | IllegalArgumentException e) {
+			System.out.println(e);
+		}
 		return returnTeamId;
 	}
 
