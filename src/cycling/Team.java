@@ -28,7 +28,7 @@ public class Team {
 	
 	
 	//Riders
-	public int addRiders(String name, int yob) {
+	public int addRider(String name, int yob) {
 		Rider tempRider = new Rider(name, yob);
 		riders.put(riderIdCounter, tempRider);
 		riderIdCounter++;

@@ -28,11 +28,11 @@ public class IDNotRecognisedException extends Exception {
 		super(message);
 	}
 	
-	static void checkID(int raceId, int[] raceIds) throws IDNotRecognisedException {
-		boolean containsID = IntStream.of(raceIds).anyMatch(x -> x == raceId);
-		for (int i = 0; i <= raceIds.length - 1; i++) {
+	static void checkID(int Ids, int[] arrayOfIds) throws IDNotRecognisedException {
+		boolean containsID = IntStream.of(arrayOfIds).anyMatch(x -> x == Ids);
+		for (int i = 0; i <= arrayOfIds.length - 1; i++) {
 			if (!containsID) {
-				throw new IDNotRecognisedException("ID \"" + raceId + "\" does not match any race IDs!");
+				throw new IDNotRecognisedException("ID \"" + Ids + "\" does not match any IDs!");
 			}
 		}
 	}
