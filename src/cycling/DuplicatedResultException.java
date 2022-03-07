@@ -24,6 +24,7 @@ public class DuplicatedResultException extends Exception {
 	 * @param message message containing details regarding the exception cause
 	 */
 	public DuplicatedResultException(String message) {
+		//rider can only have one result per race
 		super(message);
 	}
 

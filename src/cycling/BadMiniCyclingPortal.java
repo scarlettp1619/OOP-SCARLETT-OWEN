@@ -33,7 +33,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		}
 		return raceIds;
 	}
-
+	
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
@@ -284,12 +284,12 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
 			InvalidStageStateException {
 		LocalTime totalTime = LocalTime.of(0, 0, 0, 0);
-		for (Race r : races.values()) {
+		/*for (Race r : races.values()) {
 			for (int segmentIds : r.getStages().keySet()) {
 				//WIp
 				
 			}
-		}
+		}*/
 		for (LocalTime time : checkpoints) {
 			totalTime = totalTime.plusHours(time.getHour()).plusMinutes(time.getMinute()).plusSeconds(time.getSecond()).plusNanos(time.getNano());
 		}

@@ -27,7 +27,7 @@ public class InvalidStageTypeException extends Exception {
 	
 	static void checkStageType(Stage stage) throws InvalidStageTypeException {
 		if(stage.getStageType() == StageType.TT) {
-			throw new InvalidStageTypeException();
+			throw new InvalidStageTypeException("Invalid stage type! Time trial stages cannot contain any segment!");
 		}
 	}
 }

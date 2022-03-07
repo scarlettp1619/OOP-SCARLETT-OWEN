@@ -4,14 +4,17 @@ import java.util.Arrays;
 import cycling.BadCyclingPortal;
 import cycling.BadMiniCyclingPortal;
 import cycling.CyclingPortalInterface;
+import cycling.DuplicatedResultException;
 import cycling.IDNotRecognisedException;
 import cycling.IllegalNameException;
+import cycling.InvalidCheckpointsException;
 import cycling.InvalidLengthException;
 import cycling.InvalidLocationException;
 import cycling.InvalidNameException;
 import cycling.InvalidStageStateException;
 import cycling.InvalidStageTypeException;
 import cycling.MiniCyclingPortalInterface;
+import cycling.NameNotRecognisedException;
 import cycling.StageType;
 
 /**
@@ -36,11 +39,14 @@ public class CyclingPortalInterfaceTestApp {
 	 * @throws InvalidStageTypeException 
 	 * @throws InvalidStageStateException 
 	 * @throws InvalidLocationException 
+	 * @throws InvalidCheckpointsException 
+	 * @throws DuplicatedResultException 
+	 * @throws NameNotRecognisedException 
 	 */
-	public static void main(String[] args) throws IllegalNameException, InvalidNameException, IDNotRecognisedException, InvalidLengthException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
+	public static void main(String[] args) throws IllegalNameException, InvalidNameException, IDNotRecognisedException, InvalidLengthException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException, DuplicatedResultException, InvalidCheckpointsException, NameNotRecognisedException {
 		System.out.println("The system compiled and started the execution...");
 
-		MiniCyclingPortalInterface portal = new BadMiniCyclingPortal();
+		CyclingPortalInterface portal = new BadCyclingPortal();
 		//CyclingPortalInterface portal = new BadCyclingPortal();
 		LocalDateTime testTime = LocalDateTime.now();
 		
@@ -49,16 +55,18 @@ public class CyclingPortalInterfaceTestApp {
 		// portal.createRace("name of whatever", "des"); // invalid name
 		portal.createRace("nameofwhatever2", "description of race 0"); // valid name
 		//portal.removeRaceById(100);
-		portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, StageType.FLAT);
-		portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, StageType.FLAT);
+		//portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, StageType.FLAT);
+		//portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, StageType.FLAT);
 		//String details = portal.viewRaceDetails(0);
 		//int stages = portal.getNumberOfStages(1);
 		//portal.removeStageById(1);
-		portal.addIntermediateSprintToStage(0, 10);
-		portal.addIntermediateSprintToStage(0, 10);
-		portal.addIntermediateSprintToStage(1, 10);
-		portal.removeSegment(1);
-		System.out.println(Arrays.toString(portal.getStageSegments(1)));
+		//portal.addIntermediateSprintToStage(0, 10);
+		//portal.addIntermediateSprintToStage(0, 10);
+		//portal.addIntermediateSprintToStage(1, 10);
+		//portal.registerRiderResultsInStage(0, 0);
+		//portal.removeSegment(1);
+		portal.removeRaceByName("nameofwhatdever2");
+		//System.out.println(Arrays.toString(portal.getStageSegments(1)));
 		
 		
 		assert (portal.getRaceIds().length == 0)

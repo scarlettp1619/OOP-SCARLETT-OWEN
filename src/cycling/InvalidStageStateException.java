@@ -29,7 +29,7 @@ public class InvalidStageStateException extends Exception {
 	
 	static void checkStageState(Stage stage, StageState stageState) throws InvalidStageStateException {
 		if(stage.getStageState() == stageState) {
-			throw new InvalidStageStateException();
+			throw new InvalidStageStateException("Invalid stage state!");
 		}
 	}
 }

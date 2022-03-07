@@ -1,5 +1,9 @@
 package cycling;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * Thrown when attempting to use a name that does not exit in the
  * system.
@@ -24,6 +28,17 @@ public class NameNotRecognisedException extends Exception {
 	 */
 	public NameNotRecognisedException(String message) {
 		super(message);
+	}
+	
+	static void checkName(String name, int[] raceIds, HashMap<Integer, Race> races) throws NameNotRecognisedException{
+		ArrayList<String> raceNames = new ArrayList<String>();
+		for (int i = 0; i <= raceIds.length - 1; i++) {
+			Race tempRace = races.get(i);
+			raceNames.add(tempRace.getName());
+		}
+		if (!raceNames.contains(name)) {
+			throw new NameNotRecognisedException("Race name doesn't exist!"); 
+		}
 	}
 
 }
