@@ -1,5 +1,6 @@
 package cycling;
 
+import java.time.LocalTime;
 import java.util.*;
 
 public class Rider {
@@ -7,9 +8,9 @@ public class Rider {
 	String riderName;
 	int yearOfBirth;
 	
-	HashMap<Integer, Integer> gcScores = new HashMap<Integer, Integer>(); //HashMap of stage Id and time (in seconds) to complete for stage
-	HashMap<Integer, Integer> scScores = new HashMap<Integer, Integer>(); //HashMap of segment Id and score for that score segment
-	HashMap<Integer, Integer> mcScores = new HashMap<Integer, Integer>(); //HashMap of segment Id and score for that mountain segment
+	HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
+	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that score segment
+	HashMap<Integer, LocalTime> mcScores = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that mountain segment
 	
 	public Rider(String name, int yob) {
 		riderName = name;
@@ -29,53 +30,55 @@ public class Rider {
 	}
 	
 	//GC
-	public int getAggregateGC() {
-		int gcScore = 0;
-		for (int gc : gcScores.values()) {
-			gcScore = gcScore + gc;
+	public LocalTime getTotalStageTime() {
+		LocalTime gcScore = LocalTime.of(0, 0, 0, 0);
+		for (LocalTime gc : stageTimes.values()) {
+			gcScore = gcScore.plusHours(gc.getHour()).plusMinutes(gc.getMinute()).plusSeconds(gc.getSecond()).plusNanos(gc.getNano());
 		}
 		return gcScore;
 	}
 	
-	public void setGCScore(int stageId, int timeInSeconds) {
-		gcScores.put(stageId, timeInSeconds);
+	public void setStageTime(int stageId, LocalTime time) {
+		stageTimes.put(stageId, time);
 	}
 	
 	public void removeGCScore(int stageId) {
-		gcScores.remove(stageId);
+		stageTimes.remove(stageId);
 	}
 	
 	//SC
-	public int getAggregateSC() {
-		int scScore = 0;
-		for (int sc : scScores.values()) {
-			scScore = scScore + sc;
+	public int getTotalSegmentTime() {
+		//WIP
+		LocalTime scScore = LocalTime.of(0, 0, 0, 0);
+		for (LocalTime sc : segmentTimes.values()) {
+			scScore = scScore.plusHours(sc.getHour()).plusMinutes(sc.getMinute()).plusSeconds(sc.getSecond()).plusNanos(sc.getNano());
 		}
-		return scScore;
+		return 0;
 	}
 	
-	public void setSCScores(int segmentId, int score) {
-		scScores.put(segmentId, score);
+	public void setSegmentTimes(int segmentId, LocalTime time) {
+		segmentTimes.put(segmentId, time);
 	}
 	
 	public void removeSCScore(int segmentId) {
-		scScores.remove(segmentId);
+		segmentTimes.remove(segmentId);
 	}
 	
-	//MC
+	/*
 	public int getAggregateMC() {
-		int mcScore = 0;
-		for (int mc : mcScores.values()) {
-			mcScore = mcScore + mc;
+		//WIP
+		LocalTime mcScore = LocalTime.of(0, 0, 0, 0);
+		for (LocalTime mc : mcScores.values()) {
+			mcScore = mcScore.plusHours(mc.getHour()).plusMinutes(mc.getMinute()).plusSeconds(mc.getSecond()).plusNanos(mc.getNano());
 		}
-		return mcScore;
+		return 0;
 	}
 	
-	public void setMCScores(int segmentId, int score) {
-		mcScores.put(segmentId, score);
+	public void setMCScores(int segmentId, LocalTime time) {
+		mcScores.put(segmentId, time);
 	}
 	
 	public void removeMCScore(int segmentId) {
 		mcScores.remove(segmentId);
-	}
+	}*/
 }

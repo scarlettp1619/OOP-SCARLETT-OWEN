@@ -39,7 +39,7 @@ public class Team {
 		riders.remove(RidersId);
 	}
 	
-	public Rider getRiders(int RidersId) {
+	public Rider getRider(int RidersId) {
 		return riders.get(RidersId);
 	}
 	

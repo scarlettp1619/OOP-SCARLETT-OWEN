@@ -183,7 +183,6 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public void removeSegment(int segmentId) throws IDNotRecognisedException, InvalidStageStateException {
-		// same as remove stages method but again more loops and hashmaps
 		for (Race r : races.values()) {
 			for (Stage s : r.getStages().values()) {
 				s.removeSegment(segmentId);
@@ -284,8 +283,20 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
 			InvalidStageStateException {
-		// TODO Auto-generated method stub
-
+		LocalTime totalTime = LocalTime.of(0, 0, 0, 0);
+		for (Race r : races.values()) {
+			for (int segmentIds : r.getStages().keySet()) {
+				//WIp
+				
+			}
+		}
+		for (LocalTime time : checkpoints) {
+			totalTime = totalTime.plusHours(time.getHour()).plusMinutes(time.getMinute()).plusSeconds(time.getSecond()).plusNanos(time.getNano());
+		}
+		for (Team t : teams.values()) {
+			Rider rider = t.getRider(riderId);
+			rider.setStageTime(stageId, totalTime);
+		}
 	}
 
 	@Override
