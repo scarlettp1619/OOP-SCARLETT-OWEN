@@ -1,11 +1,16 @@
 package cycling;
 
+import java.time.LocalTime;
+import java.util.HashMap;
+
 public class Segment {
 	
 	SegmentType segmentType;
 	double segmentLocation;
 	double segmentLength;
 	double avgGradient;
+	
+	HashMap<Integer, LocalTime> riderTimes =  new HashMap<Integer, LocalTime>();
 	
 	public Segment(double loc, SegmentType type, double aGrad, double length){
 		segmentLocation = loc;
@@ -54,6 +59,13 @@ public class Segment {
 			avgGradient = aGrad;
 		}
 		
+		//Rider Time
+		public void setRiderTime(int riderId, LocalTime time) {
+			riderTimes.put(riderId, time);
+		}
+		
+		
+		//toString
 		@Override
 		public String toString() {
 			String str = String.format("Type: %s, Location: %f, Length: %f, AverageGradient: %f", segmentType, segmentLocation, segmentLength, avgGradient);

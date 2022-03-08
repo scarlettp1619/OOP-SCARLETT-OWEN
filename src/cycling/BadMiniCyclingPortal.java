@@ -284,18 +284,16 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
 			InvalidStageStateException {
 		LocalTime totalTime = LocalTime.of(0, 0, 0, 0);
-		/*for (Race r : races.values()) {
-			for (int segmentIds : r.getStages().keySet()) {
-				//WIp
-				
-			}
-		}*/
 		for (LocalTime time : checkpoints) {
 			totalTime = totalTime.plusHours(time.getHour()).plusMinutes(time.getMinute()).plusSeconds(time.getSecond()).plusNanos(time.getNano());
-		}
-		for (Team t : teams.values()) {
-			Rider rider = t.getRider(riderId);
-			rider.setStageTime(stageId, totalTime);
+			for (int x : getStageSegments(stageId)) {
+				for (Team t : teams.values()) {
+					Rider rider = t.getRider(riderId);
+					rider.setStageTime(stageId, totalTime);
+					rider.setSegmentTimes(x, time);
+					t.riders.put(riderId, rider);
+				}
+			}
 		}
 	}
 

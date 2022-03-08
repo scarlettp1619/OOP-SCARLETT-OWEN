@@ -10,7 +10,7 @@ public class Rider {
 	
 	HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
 	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that score segment
-	HashMap<Integer, LocalTime> mcScores = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that mountain segment
+	//HashMap<Integer, LocalTime> mcScores = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that mountain segment
 	
 	public Rider(String name, int yob) {
 		riderName = name;
