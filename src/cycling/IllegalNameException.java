@@ -1,5 +1,6 @@
 package cycling;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -31,39 +32,9 @@ public class IllegalNameException extends Exception {
 		super(message);
 	}
 	
-	
-	static void checkRaceName(String name, int[] raceIds, HashMap<Integer, Race> races) throws IllegalNameException {
-		for (int i = 0; i <= raceIds.length - 1; i++) {
-			int raceId = raceIds[i];
-			Race tempRace = races.get(raceId);
-			checkName = tempRace.getName();
-			if (name == checkName) {
-				throw new IllegalNameException("Race name \"" + name + "\" already exists!");
-			}
-		}
-	}
-	
-	static void checkStageName(String name, int raceId, HashMap<Integer, Race> races) throws IllegalNameException {
-		Race tempRace = races.get(raceId);
-		HashMap<Integer, Stage> stages = tempRace.getStages();
-		int[] stagesIds = tempRace.getStageIds();
-		for (int i = 0; i <= stagesIds.length - 1; i++) {
-			Stage tempStage = stages.get(stagesIds[i]);
-			String stageName = tempStage.getStageName();
-			if (name == stageName) {
-				throw new IllegalNameException("Stage name \"" + name + "\" already exists!");
-			}
-		}
-	}
-	
-	static void checkTeamName(String name, int[] teamIds, HashMap<Integer, Team> teams) throws IllegalNameException {
-		for (int i = 0; i <= teamIds.length - 1; i++) {
-			int teamId = teamIds[i];
-			Team tempTeam = teams.get(teamId);
-			checkName = tempTeam.getTeamName();
-			if (name == checkName) {
-				throw new IllegalNameException("Team name \"" + name + "\" already exists!");
-			}
+	static void checkName(String name, String checkName) throws IllegalNameException {
+		if (name == checkName) {
+			throw new IllegalNameException("Name already exists!");
 		}
 	}
 

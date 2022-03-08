@@ -37,12 +37,12 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
-			IllegalNameException.checkRaceName(name, getRaceIds(), races);
+			//IllegalNameException.checkRaceName(name, getRaceIds(), races);
 			InvalidNameException.checkName("Race", name);
 			Race tempRace = new Race(name, description);
 			races.put(raceIdCounter, tempRace);
 			raceIdCounter++;
-		} catch (IllegalNameException | InvalidNameException e) {
+		} catch (InvalidNameException e) {
 			System.out.println(e);
 		}
 		return raceIdCounter-1;
@@ -93,13 +93,13 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		int returnStageId = -1;
 		try {
 			IDNotRecognisedException.checkID(raceId, getRaceIds());
-			IllegalNameException.checkStageName(stageName, raceId, races);
+			//IllegalNameException.checkStageName(stageName, raceId, races);
 			InvalidNameException.checkName("Stage", stageName);
 			InvalidLengthException.checkLength(length);
 			Race tempRace = races.get(raceId);
 			returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
 			races.put(raceId, tempRace);
-		} catch (IDNotRecognisedException | IllegalNameException | InvalidNameException | InvalidLengthException e){
+		} catch (IDNotRecognisedException | InvalidNameException | InvalidLengthException e){
 			System.out.println(e);
 		}
 		return returnStageId;

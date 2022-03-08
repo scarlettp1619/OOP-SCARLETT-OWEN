@@ -3,6 +3,7 @@ package cycling;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -37,7 +38,9 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
-			IllegalNameException.checkRaceName(name, getRaceIds(), races);
+			for (Race r : races.values()) {
+				IllegalNameException.checkName(name, r.getName());
+			}
 			InvalidNameException.checkName("Race", name);
 			Race tempRace = new Race(name, description);
 			races.put(raceIdCounter, tempRace);
@@ -93,7 +96,12 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		int returnStageId = -1;
 		try {
 			IDNotRecognisedException.checkID(raceId, getRaceIds());
-			IllegalNameException.checkStageName(stageName, raceId, races);
+			for (Race r : races.values()) {
+				HashMap<Integer, Stage> stages = r.getStages();
+				for (Stage s : stages.values()) {
+					IllegalNameException.checkName(stageName, s.getStageName());
+				}
+			}
 			InvalidNameException.checkName("Stage", stageName);
 			InvalidLengthException.checkLength(length);
 			Race tempRace = races.get(raceId);
@@ -235,13 +243,15 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
-			IllegalNameException.checkTeamName(name, getTeams(), teams);
-			InvalidNameException.checkName("Team", name);
+			for (Team t : teams.values()) {
+					IllegalNameException.checkName(name, t.getTeamName());
+					InvalidNameException.checkName("Team", name);
+			}
 			Team tempTeam = new Team(name, description);
 			teams.put(teamIdCounter, tempTeam);
 			teamIdCounter++;
-		} catch (IllegalNameException | InvalidNameException e) {
-			System.out.println(e);
+			} catch (IllegalNameException | InvalidNameException e) {
+				System.out.println(e);
 		}
 		return teamIdCounter-1;
 	}
@@ -398,20 +408,19 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
 		int raceId = -1;
-		try {
-			NameNotRecognisedException.checkName(name, getRaceIds(), races);
-			for (int i : races.keySet()) {
-				Race tempRace = races.get(i);
-				System.out.println(tempRace);
-				if (name == tempRace.getName()) {
+		ArrayList<String> checkNames = new ArrayList<String>();
+		for (int i : races.keySet()) {
+			Race tempRace = races.get(i);
+			checkNames.add(tempRace.getName());
+			if (name == tempRace.getName()) {
 					raceId = i;
-				}
 			}
-		} catch(NameNotRecognisedException e) {
-			System.out.println(e);
 		}
-		if (raceId != -1) {
+		try {
+			NameNotRecognisedException.checkName(name, checkNames);
 			races.remove(raceId);
+		} catch (NameNotRecognisedException e) {
+			System.out.println(e);
 		}
 
 	}

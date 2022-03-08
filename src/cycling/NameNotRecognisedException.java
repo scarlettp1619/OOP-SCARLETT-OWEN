@@ -30,13 +30,8 @@ public class NameNotRecognisedException extends Exception {
 		super(message);
 	}
 	
-	static void checkName(String name, int[] raceIds, HashMap<Integer, Race> races) throws NameNotRecognisedException{
-		ArrayList<String> raceNames = new ArrayList<String>();
-		for (int i = 0; i <= raceIds.length - 1; i++) {
-			Race tempRace = races.get(i);
-			raceNames.add(tempRace.getName());
-		}
-		if (!raceNames.contains(name)) {
+	static void checkName(String name, ArrayList<String> checkNames) throws NameNotRecognisedException{
+		if (!checkNames.contains(name)) {
 			throw new NameNotRecognisedException("Race name doesn't exist!"); 
 		}
 	}
