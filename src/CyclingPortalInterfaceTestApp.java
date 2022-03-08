@@ -55,19 +55,19 @@ public class CyclingPortalInterfaceTestApp {
 		// portal.createRace("name of whatever", "des"); // invalid name
 		portal.createRace("nameofwhatever2", "description of race 0"); // valid name
 		//portal.removeRaceById(100);
-		//portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, StageType.FLAT);
+		portal.addStageToRace(0, "stagename0", "stagedes", 5, testTime, StageType.FLAT);
 		//portal.addStageToRace(0, "stagename1", "stagedes", 5, testTime, StageType.FLAT);
 		//String details = portal.viewRaceDetails(0);
 		//int stages = portal.getNumberOfStages(1);
 		//portal.removeStageById(1);
-		//portal.addIntermediateSprintToStage(0, 10);
-		//portal.addIntermediateSprintToStage(0, 10);
+		portal.addIntermediateSprintToStage(0, 10);
+		portal.addIntermediateSprintToStage(0, 10);
 		//portal.addIntermediateSprintToStage(1, 10);
 		//portal.registerRiderResultsInStage(0, 0);
 		//portal.removeSegment(1);
-		portal.removeRaceByName("nameofwhatdever2");
 		//System.out.println(Arrays.toString(portal.getStageSegments(1)));
 		
+		System.out.println(Arrays.toString(portal.getStageSegments(1)));
 		
 		assert (portal.getRaceIds().length == 0)
 				: "Innitial SocialMediaPlatform not empty as required or not returning an empty array.";

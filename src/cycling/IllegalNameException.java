@@ -55,5 +55,16 @@ public class IllegalNameException extends Exception {
 			}
 		}
 	}
+	
+	static void checkTeamName(String name, int[] teamIds, HashMap<Integer, Team> teams) throws IllegalNameException {
+		for (int i = 0; i <= teamIds.length - 1; i++) {
+			int teamId = teamIds[i];
+			Team tempTeam = teams.get(teamId);
+			checkName = tempTeam.getTeamName();
+			if (name == checkName) {
+				throw new IllegalNameException("Team name \"" + name + "\" already exists!");
+			}
+		}
+	}
 
 }
