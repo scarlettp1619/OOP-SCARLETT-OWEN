@@ -338,7 +338,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			}
 			for (Team t : teams.values()) {
 				Rider rider = t.getRider(riderId);
-				rider.setStageTime(stageId, totalTime);
+				//rider.setStageTime(stageId, totalTime);
 			}
 		} catch(IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
 			

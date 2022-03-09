@@ -10,7 +10,7 @@ public class Rider {
 	
 	HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
 	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that score segment
-	//HashMap<Integer, LocalTime> mcScores = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that mountain segment
+	HashMap<Integer, HashMap<Integer, LocalTime>> timeScores = new HashMap<Integer, HashMap<Integer, LocalTime>>(); //HashMap of segment Id and time for that mountain segment
 	
 	public Rider(String name, int yob) {
 		riderName = name;
@@ -29,7 +29,21 @@ public class Rider {
 		return yearOfBirth;
 	}
 	
-	//GC
+	//Scores
+	public void addSegmentScore(int stageId, int segmentId, LocalTime score) {
+		HashMap<Integer, LocalTime> tempScore = timeScores.get(stageId);
+		tempScore.put(segmentId, score);
+		timeScores.put(stageId, tempScore);
+	}
+	public LocalTime[] getSegmentScore(int stageId) {
+		return timeScores.get(stageId).values().toArray(new LocalTime[0]);
+	}
+	public void removeStageScore(int stageId) {
+		timeScores.remove(stageId);
+	}
+	
+	
+	/*
 	public LocalTime getTotalStageTime() {
 		LocalTime gcScore = LocalTime.of(0, 0, 0, 0);
 		for (LocalTime gc : stageTimes.values()) {
@@ -64,7 +78,6 @@ public class Rider {
 		segmentTimes.remove(segmentId);
 	}
 	
-	/*
 	public int getAggregateMC() {
 		//WIP
 		LocalTime mcScore = LocalTime.of(0, 0, 0, 0);
