@@ -345,12 +345,17 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		for(Race r : races.values()) {
 			Stage tempStage = r.getStage(stageId);
 			LocalTime[] times = tempStage.getResults();
-			for(LocalTime t : times) {
-				int n = times.length;
-				
-				//if(t.compareTo(t))
-			}
-			
+			int n = times.length;
+			LocalTime temp = LocalTime.of(0, 0, 0, 0);
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < (n-i); j++) {
+					if (times[j-1].compareTo(times[j]) > 0) {
+						temp = times[j-1];
+						times[j-1] = times[j];
+						times[j] = temp;
+					}
+				}
+			}			
 		}
 		// TODO Auto-generated method stub
 		return null;
