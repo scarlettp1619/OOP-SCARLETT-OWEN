@@ -107,6 +107,10 @@ public class Stage {
 		return results.values().toArray(new LocalTime[0]);
 	}
 	
+	public Integer[] getResultIds() {
+        return results.keySet().toArray(new Integer[0]);
+    }
+	
 	public void removeResults(int riderId) {
 		results.remove(riderId);
 	}

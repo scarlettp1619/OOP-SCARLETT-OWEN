@@ -345,6 +345,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		for(Race r : races.values()) {
 			Stage tempStage = r.getStage(stageId);
 			LocalTime[] times = tempStage.getResults();
+			Integer[] riderIds = tempStage.getResultIds();
 			int n = times.length;
 			LocalTime temp = LocalTime.of(0, 0, 0, 0);
 			for (int i = 0; i < n; i++) {
