@@ -305,8 +305,15 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTime[] timeArray = getRiderResultsInStage(stageId, riderId);
+		LocalTime elapsedTime = LocalTime.of(0, 0);
+		for (LocalTime time : timeArray) {
+			elapsedTime.plusHours(time.getHour());
+			elapsedTime.plusSeconds(time.getSecond());
+			elapsedTime.plusMinutes(time.getMinute());
+			elapsedTime.plusNanos(time.getNano());
+		}
+		return elapsedTime;
 	}
 
 	@Override
@@ -320,6 +327,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
+		LocalTime[] rankedTimes;
 		int[] rankedRiders;
 		//WIP
 		for(Team t : teams.values()) {

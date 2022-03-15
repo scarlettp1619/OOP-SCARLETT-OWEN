@@ -8,7 +8,7 @@ public class Rider {
 	String riderName;
 	int yearOfBirth;
 	
-	HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
+	//HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
 	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that score segment
 	HashMap<Integer, HashMap<Integer, LocalTime>> timeScores = new HashMap<Integer, HashMap<Integer, LocalTime>>(); //HashMap of segment Id and time for that mountain segment
 	
@@ -35,9 +35,11 @@ public class Rider {
 		tempScore.put(segmentId, score);
 		timeScores.put(stageId, tempScore);
 	}
+	
 	public LocalTime[] getSegmentScore(int stageId) {
 		return timeScores.get(stageId).values().toArray(new LocalTime[0]);
 	}
+	
 	public void removeStageScore(int stageId) {
 		timeScores.remove(stageId);
 	}
