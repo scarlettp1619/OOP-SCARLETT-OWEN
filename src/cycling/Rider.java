@@ -1,9 +1,10 @@
 package cycling;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.*;
 
-public class Rider {
+public class Rider implements Serializable{
 	
 	String riderName;
 	int yearOfBirth;

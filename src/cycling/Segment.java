@@ -1,9 +1,10 @@
 package cycling;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.HashMap;
 
-public class Segment {
+public class Segment implements Serializable{
 	
 	SegmentType segmentType;
 	double segmentLocation;

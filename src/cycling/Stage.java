@@ -1,9 +1,10 @@
 package cycling;
 
+import java.io.Serializable;
 import java.time.*;
 import java.util.HashMap;
 
-public class Stage {
+public class Stage implements Serializable{
 	
 	StageState stageState = StageState.UNDER_PREPARATION;
 	
@@ -16,7 +17,7 @@ public class Stage {
 	HashMap<Integer, Segment> segments = new HashMap<Integer, Segment>();
 	static int segmentIdCounter = 0;
 	
-	HashMap<Integer, LocalTime> results = new HashMap<Integer, LocalTime>();
+	HashMap<Integer, LocalTime[]> results = new HashMap<Integer, LocalTime[]>();
 	
 	//Constructor
 	public Stage(String name, String description, double length, LocalDateTime startTime, StageType type){
@@ -103,8 +104,8 @@ public class Stage {
 		return segments;
 	}
 	
-	public LocalTime[] getResults() {
-		return results.values().toArray(new LocalTime[0]);
+	public LocalTime[] getResults(int riderId) {
+		return results.get(riderId);
 	}
 	
 	public Integer[] getResultIds() {
@@ -113,6 +114,10 @@ public class Stage {
 	
 	public void removeResults(int riderId) {
 		results.remove(riderId);
+	}
+	
+	public HashMap<Integer, LocalTime[]> getResultsHashMap(){
+		return results;
 	}
 	
 	//toString

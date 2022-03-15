@@ -1,8 +1,9 @@
 package cycling;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Race {
+public class Race implements Serializable{
 	
 	String raceName;
 	String raceDescriptor;
