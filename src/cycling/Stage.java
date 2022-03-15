@@ -16,6 +16,8 @@ public class Stage {
 	HashMap<Integer, Segment> segments = new HashMap<Integer, Segment>();
 	static int segmentIdCounter = 0;
 	
+	HashMap<Integer, LocalTime> results = new HashMap<Integer, LocalTime>();
+	
 	//Constructor
 	public Stage(String name, String description, double length, LocalDateTime startTime, StageType type){
 		stageType = type;
@@ -99,6 +101,14 @@ public class Stage {
 	
 	public HashMap<Integer, Segment> getSegment() {
 		return segments;
+	}
+	
+	public LocalTime[] getResults() {
+		return results.values().toArray(new LocalTime[0]);
+	}
+	
+	public void removeResults(int riderId) {
+		results.remove(riderId);
 	}
 	
 	//toString

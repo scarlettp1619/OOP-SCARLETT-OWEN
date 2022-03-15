@@ -283,26 +283,36 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
 			InvalidStageStateException {
 		for (LocalTime time : checkpoints) {
-			for (int x : getStageSegments(stageId)) {
+			for (Race r : races.values()) {
+				Stage tempStage = r.getStage(stageId);
+				tempStage.results.put(riderId, time);
+				r.stages.put(stageId, tempStage);
+			}
+			/*for (int x : getStageSegments(stageId)) {
+				
 				for (Team t : teams.values()) {
 					Rider rider = t.getRider(riderId);
 					rider.addSegmentScore(stageId, x, time);
 					t.riders.put(riderId, rider);
 				}
-			}
+			}*/
 		}
 	}
 
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		LocalTime[] stageTimes = null;
-		for (Team t : teams.values()) {
+		for (Race r : races.values()) {
+			Stage tempStage = r.getStage(stageId);
+			stageTimes = tempStage.getResults();
+		}
+		/*for (Team t : teams.values()) {
 			Rider rider = t.getRider(riderId);
 			stageTimes = rider.getSegmentScore(stageId);
-		}
+		}*/
 		return stageTimes;
 	}
-
+	
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		LocalTime[] timeArray = getRiderResultsInStage(stageId, riderId);
@@ -315,26 +325,31 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		}
 		return elapsedTime;
 	}
-
+	
 	@Override
 	public void deleteRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		for (Team t : teams.values()) {
+		for (Race r : races.values()) {
+			Stage tempStage = r.getStage(stageId);
+			tempStage.removeResults(riderId);
+			r.stages.put(stageId, tempStage);
+		}
+		/*for (Team t : teams.values()) {
 			Rider rider = t.getRider(riderId);
 			rider.removeStageScore(stageId);
 			t.riders.put(riderId, rider);
-		}
+		}*/
 	}
 
 	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
-		LocalTime[] rankedTimes;
-		int[] rankedRiders;
-		//WIP
-		for(Team t : teams.values()) {
-			
-		}
 		for(Race r : races.values()) {
 			Stage tempStage = r.getStage(stageId);
+			LocalTime[] times = tempStage.getResults();
+			for(LocalTime t : times) {
+				int n = times.length;
+				
+				//if(t.compareTo(t))
+			}
 			
 		}
 		// TODO Auto-generated method stub
