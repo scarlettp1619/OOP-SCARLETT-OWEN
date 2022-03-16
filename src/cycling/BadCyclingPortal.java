@@ -414,6 +414,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			checkNames.add(tempRace.getName());
 			if (name == tempRace.getName()) {
 					raceId = i;
+					break;
 			}
 		}
 		try {
