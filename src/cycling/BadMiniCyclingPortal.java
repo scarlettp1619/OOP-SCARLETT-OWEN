@@ -390,7 +390,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
     public void saveCyclingPortal(String filename) throws IOException {
-        FileOutputStream file = new FileOutputStream(filename);
+        FileOutputStream file = new FileOutputStream(filename + ".ser");
         try {
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(this);
