@@ -341,11 +341,6 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			tempStage.removeResults(riderId);
 			r.stages.put(stageId, tempStage);
 		}
-		/*for (Team t : teams.values()) {
-			Rider rider = t.getRider(riderId);
-			rider.removeStageScore(stageId);
-			t.riders.put(riderId, rider);
-		}*/
 	}
 
 	@Override
@@ -388,7 +383,8 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		}
 		return rankedTimes;
 	}
-
+	
+	//----
 	@Override
 	public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
 		int[] riderRanks = getRidersRankInStage(stageId);
@@ -397,7 +393,11 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 			Stage s = r.getStage(stageId);
 			int i = 0;
 			while(i < riderRanks.length) {
-				riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
+				if(pointMaps.getScorings(s.getStageType()).containsKey(i)) {
+					riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
+				} else {
+					riderScores[i] = 0;
+				}
 				i++;
 			}
 		}
@@ -406,8 +406,16 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] rankedRiders = getRidersRankInStage(stageId);
+		int[] riderScores = new int[rankedRiders.length];
+		for (Race r : races.values()) {
+			Stage s = r.getStage(stageId);
+			for (int riderId : rankedRiders) {
+				LocalTime[] times = s.getResults(rankedRiders[riderId]);
+			}
+
+		}
+		return riderScores;
 	}
 
 	@Override

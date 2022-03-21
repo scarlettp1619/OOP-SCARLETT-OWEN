@@ -465,8 +465,11 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage s = r.getStage(stageId);
 				int i = 0;
 				while(i < riderRanks.length) {
-					riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
-					i++;
+					if(pointMaps.getScorings(s.getStageType()).containsKey(i)) {
+						riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
+					} else {
+						riderScores[i] = 0;
+					}
 				}
 			}
 		} catch (IDNotRecognisedException e) {
@@ -474,11 +477,27 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		}
 		return riderScores;
 	}
+	
+	//
+	public int[] getRidersRankInSegment(int segmentId) {
+		return null;
+	}
+	//
 
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] rankedRiders = getRidersRankInStage(stageId);
+		int[] riderScores = new int[rankedRiders.length];
+		for (Race r : races.values()) {
+			Stage s = r.getStage(stageId);
+			int i;
+			for (int riderId : rankedRiders) {
+				LocalTime[] times = s.getResults(rankedRiders[riderId]);
+				//wip
+			}
+
+		}
+		return riderScores;
 	}
 
 	@Override
