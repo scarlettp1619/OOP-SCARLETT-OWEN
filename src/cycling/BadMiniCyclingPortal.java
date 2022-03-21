@@ -24,6 +24,11 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	
 	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
 	static int teamIdCounter = 0;
+	
+	PointMaps pointMaps;
+	HashMap<Integer, Integer> flatFinishScores = pointMaps.getScorings(StageType.FLAT);
+	HashMap<Integer, Integer> hillyFinishScores = pointMaps.getScorings(StageType.MEDIUM_MOUNTAIN);
+	HashMap<Integer, Integer> highFinishScores = pointMaps.getScorings(StageType.HIGH_MOUNTAIN);
 
 	@Override
 	public int[] getRaceIds() {
@@ -39,7 +44,9 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
 		try {
-			//IllegalNameException.checkRaceName(name, getRaceIds(), races);
+			for (Race r : races.values()) {
+				IllegalNameException.checkName(name, r.getName());
+			}
 			InvalidNameException.checkName("Race", name);
 			Race tempRace = new Race(name, description);
 			races.put(raceIdCounter, tempRace);
@@ -318,10 +325,11 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		LocalTime[] timeArray = getRiderResultsInStage(stageId, riderId);
 		LocalTime elapsedTime = LocalTime.of(0, 0);
 		for (LocalTime time : timeArray) {
-			elapsedTime.plusHours(time.getHour());
-			elapsedTime.plusSeconds(time.getSecond());
-			elapsedTime.plusMinutes(time.getMinute());
-			elapsedTime.plusNanos(time.getNano());
+			elapsedTime = elapsedTime.plusHours(time.getHour());
+			elapsedTime = elapsedTime.plusSeconds(time.getSecond());
+			elapsedTime = elapsedTime.plusMinutes(time.getMinute());
+			elapsedTime = elapsedTime.plusNanos(time.getNano());
+			//System.out.println(time);
 		}
 		return elapsedTime;
 	}
@@ -355,10 +363,15 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 		for (int riderId : tempStage.getResultsHashMap().keySet()) {
 			tempMap.put(riderId, getRiderAdjustedElapsedTimeInStage(stageId, riderId));
 		}
+		
 		RankerComparator ranker = new RankerComparator(tempMap);
-		SortedMap<Integer, LocalTime> sortedMap = new TreeMap<Integer, LocalTime>(ranker);
+		TreeMap<Integer, LocalTime> sortedMap = new TreeMap<Integer, LocalTime>(ranker);
 		
 		sortedMap.putAll(tempMap);
+		
+		/*for(int i : sortedMap.keySet()) {
+			System.out.print(i);
+		}*/
 		
 		int[] rankedRiders = Arrays.stream(sortedMap.keySet().toArray(new Integer[sortedMap.size()])).mapToInt(i -> i).toArray();
 		return rankedRiders;
@@ -366,14 +379,29 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
 	public LocalTime[] getRankedAdjustedElapsedTimesInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] rankedRiders = getRidersRankInStage(stageId);
+		LocalTime[] rankedTimes = new LocalTime[rankedRiders.length];
+		int i = 0;
+		for(int riderId : rankedRiders) {
+			rankedTimes[i] = getRiderAdjustedElapsedTimeInStage(stageId, riderId);
+			i++;
+		}
+		return rankedTimes;
 	}
 
 	@Override
 	public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] riderRanks = getRidersRankInStage(stageId);
+		int[] riderScores = new int[riderRanks.length];
+		for (Race r : races.values()) {
+			Stage s = r.getStage(stageId);
+			int i = 0;
+			while(i < riderRanks.length) {
+				riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
+				i++;
+			}
+		}
+		return riderScores;
 	}
 
 	@Override
@@ -390,20 +418,21 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 
 	@Override
     public void saveCyclingPortal(String filename) throws IOException {
-        FileOutputStream file = new FileOutputStream(filename + ".ser");
+        FileOutputStream file = new FileOutputStream("saves/" + filename + ".ser");
         try {
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(this);
             out.close();
+            System.out.println("Saved in /saves/" + filename);
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Save failed");
         }
 
     }
 
     @Override
     public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-        FileInputStream file = new FileInputStream(filename);
+        FileInputStream file = new FileInputStream("saves/" + filename + ".ser");
         ObjectInputStream objInput = new ObjectInputStream(file);
         BadMiniCyclingPortal p = (BadMiniCyclingPortal) objInput.readObject();
         this.races = p.races;
