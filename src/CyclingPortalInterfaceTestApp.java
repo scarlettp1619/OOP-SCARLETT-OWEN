@@ -50,21 +50,22 @@ public class CyclingPortalInterfaceTestApp {
 		System.out.println("The system compiled and started the execution... \n");
 
 		MiniCyclingPortalInterface portal = new BadMiniCyclingPortal();
+		createTestSave("woaaah");
 		//CyclingPortalInterface portal = new BadCyclingPortal();
-		LocalDateTime testTime = LocalDateTime.now();
+		//LocalDateTime testTime = LocalDateTime.now();
 		
 		//createTestSave("save");
 		
 		
-		try {
-			portal.loadCyclingPortal("save");
-		} catch (ClassNotFoundException | IOException e) {
-		}
+		//try {
+			//portal.loadCyclingPortal("save");
+		//} catch (ClassNotFoundException | IOException e) {
+		//}
 		
-		System.out.println(Arrays.toString(portal.getRaceStages(0)));
-		System.out.println(Arrays.toString(portal.getRiderResultsInStage(0, 0)));
-		System.out.println(Arrays.toString(portal.getRidersRankInStage(0)));
-		System.out.println(Arrays.toString(portal.getRankedAdjustedElapsedTimesInStage(0)));
+		//System.out.println(Arrays.toString(portal.getRaceStages(0)));
+		//System.out.println(Arrays.toString(portal.getRiderResultsInStage(0, 0)));
+		//System.out.println(Arrays.toString(portal.getRidersRankInStage(0)));
+		//System.out.println(Arrays.toString(portal.getRankedAdjustedElapsedTimesInStage(0)));
 		
 		
 		// portal.createRace("name of whatever", "des"); // invalid name
@@ -91,7 +92,7 @@ public class CyclingPortalInterfaceTestApp {
 	}
 	
 	static void createTestSave(String saveName) {
-		MiniCyclingPortalInterface portal = new BadMiniCyclingPortal();
+		CyclingPortalInterface portal = new BadCyclingPortal();
 		LocalDateTime testTime = LocalDateTime.of(0, 1, 1, 0, 0);
 		LocalTime regTime = LocalTime.of(1, 1, 1, 1);
 		LocalTime regTime2 = LocalTime.of(2, 2, 2, 2);

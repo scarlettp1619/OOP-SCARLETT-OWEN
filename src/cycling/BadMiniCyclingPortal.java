@@ -25,7 +25,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
 	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
 	static int teamIdCounter = 0;
 	
-	PointMaps pointMaps;
+	PointMaps pointMaps = new PointMaps();
 	HashMap<Integer, Integer> flatFinishScores = pointMaps.getScorings(StageType.FLAT);
 	HashMap<Integer, Integer> hillyFinishScores = pointMaps.getScorings(StageType.MEDIUM_MOUNTAIN);
 	HashMap<Integer, Integer> highFinishScores = pointMaps.getScorings(StageType.HIGH_MOUNTAIN);

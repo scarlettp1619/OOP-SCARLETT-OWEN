@@ -1,10 +1,16 @@
 package cycling;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 
 /**
@@ -23,6 +29,11 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	
 	HashMap<Integer, Team> teams = new HashMap<Integer, Team>();
 	static int teamIdCounter = 0;
+	
+	PointMaps pointMaps = new PointMaps();
+	HashMap<Integer, Integer> flatFinishScores = pointMaps.getScorings(StageType.FLAT);
+	HashMap<Integer, Integer> hillyFinishScores = pointMaps.getScorings(StageType.MEDIUM_MOUNTAIN);
+	HashMap<Integer, Integer> highFinishScores = pointMaps.getScorings(StageType.HIGH_MOUNTAIN);
 	
 	@Override
 	public int[] getRaceIds() {
@@ -164,7 +175,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage tempStage = r.getStage(stageId);
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				InvalidLocationException.checkLocation(location, tempStage.getStageLength());
-				InvalidStageStateException.checkStageState(tempStage, null);
+				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
 				InvalidStageTypeException.checkStageType(tempStage);
 				segmentId = tempStage.addSegment(location, type, averageGradient, length);
 				r.stages.put(stageId, tempStage);
@@ -184,7 +195,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage tempStage = r.getStage(stageId);
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				InvalidLocationException.checkLocation(location, tempStage.getStageLength());
-				InvalidStageStateException.checkStageState(tempStage, null);
+				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
 				InvalidStageTypeException.checkStageType(tempStage);
 				segmentId = tempStage.addSprint(location);
 				r.stages.put(stageId, tempStage);
@@ -201,7 +212,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			for (Stage s : r.getStages().values()) {
 				try {
 					IDNotRecognisedException.checkID(segmentId, s.getSegmentIds());
-					InvalidStageStateException.checkStageState(null, null);
+					InvalidStageStateException.checkStageState(s, s.getStageState());
 					s.removeSegment(segmentId);	
 				} catch (IDNotRecognisedException | InvalidStageStateException e) {
 					System.out.println(e);
@@ -215,8 +226,8 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		for (Race r : races.values()) {
 			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
-				InvalidStageStateException.checkStageState(null, null);
 				Stage tempStage = r.getStage(stageId);
+				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
 				tempStage.setStageState(StageState.WAITING_FOR_RESULTS);
 				r.stages.put(stageId, tempStage);
 			} catch(IDNotRecognisedException | InvalidStageStateException e) {
@@ -319,66 +330,149 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	}
 	
 	@Override
-	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
-			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
-			InvalidStageStateException {
-		LocalTime totalTime = LocalTime.of(0, 0, 0, 0);
+	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException, InvalidStageStateException {
 		try {
-			IDNotRecognisedException.checkID(riderId, getRaceIds());
-			InvalidCheckpointsException.checkLength(races, stageId, checkpoints);
-			InvalidStageStateException.checkStageState(null, null);
-			/*for (Race r : races.values()) {
-			for (int segmentIds : r.getStages().keySet()) {
-					//WIp
-				
-				}
-			}*/
-			for (LocalTime time : checkpoints) {
-				totalTime = totalTime.plusHours(time.getHour()).plusMinutes(time.getMinute()).plusSeconds(time.getSecond()).plusNanos(time.getNano());
-			}
 			for (Team t : teams.values()) {
-				Rider rider = t.getRider(riderId);
-				//rider.setStageTime(stageId, totalTime);
+				IDNotRecognisedException.checkID(riderId, t.getRidersId());
 			}
-		} catch(IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
-			
+			for (Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage tempStage = r.getStage(stageId);
+				InvalidCheckpointsException.checkLength(tempStage, checkpoints);
+				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
+				System.out.println(tempStage.getResults(riderId));
+				//DuplicatedResultException.checkResults(tempStage.getResults(riderId));
+				tempStage.results.put(riderId, checkpoints);
+				r.stages.put(stageId, tempStage);
+				System.out.println(tempStage.getResults(riderId));
+			}
+		} catch (IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
+			System.out.println(e);
 		}
 	}
 
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTime[] stageTimes = null;
+		try {
+			for (Team t : teams.values()) {
+				IDNotRecognisedException.checkID(riderId, t.getRidersId());
+			}
+			for (Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage tempStage = r.getStage(stageId);
+				stageTimes = tempStage.getResults(riderId);
+			}
+		} catch (IDNotRecognisedException e) {
+			System.out.println(e);
+		}
+		return stageTimes;
 	}
-
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTime elapsedTime = LocalTime.of(0, 0);
+		try {
+			for (Team t : teams.values()) {
+				IDNotRecognisedException.checkID(riderId, t.getRidersId());
+			}
+			for (Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+			}
+			LocalTime[] timeArray = getRiderResultsInStage(stageId, riderId);
+			for (LocalTime time : timeArray) {
+				elapsedTime = elapsedTime.plusHours(time.getHour());
+				elapsedTime = elapsedTime.plusSeconds(time.getSecond());
+				elapsedTime = elapsedTime.plusMinutes(time.getMinute());
+				elapsedTime = elapsedTime.plusNanos(time.getNano());
+			}
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
+		}
+		return elapsedTime;
 	}
 
 	@Override
 	public void deleteRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		try {
+			for (Team t : teams.values()) {
+				IDNotRecognisedException.checkID(riderId, t.getRidersId());
+			}
+			for (Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage tempStage = r.getStage(stageId);
+				tempStage.removeResults(riderId);
+				r.stages.put(stageId, tempStage);
+			}
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
+		}
 	}
 
 	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Stage tempStage = null;
+		for(Race r : races.values()) {
+			try {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				tempStage = r.getStage(stageId);	
+			} catch(IDNotRecognisedException e) {
+				System.out.println(e);
+			}
+		}
+		HashMap<Integer, LocalTime> tempMap = new HashMap<Integer, LocalTime>();
+		for (int riderId : tempStage.getResultsHashMap().keySet()) {
+			tempMap.put(riderId, getRiderAdjustedElapsedTimeInStage(stageId, riderId));
+		}
+		
+		RankerComparator ranker = new RankerComparator(tempMap);
+		TreeMap<Integer, LocalTime> sortedMap = new TreeMap<Integer, LocalTime>(ranker);
+		sortedMap.putAll(tempMap);
+		
+		int[] rankedRiders = Arrays.stream(sortedMap.keySet().toArray(new Integer[sortedMap.size()])).mapToInt(i -> i).toArray();
+		return rankedRiders;
 	}
 
 	@Override
 	public LocalTime[] getRankedAdjustedElapsedTimesInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTime[] rankedTimes = null;
+		int i = 0;
+		try {
+			for(Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+			}
+			int[] rankedRiders = getRidersRankInStage(stageId);
+			rankedTimes = new LocalTime[rankedRiders.length];
+			for(int riderId : rankedRiders) {
+				rankedTimes[i] = getRiderAdjustedElapsedTimeInStage(stageId, riderId);
+				i++;
+			}
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
+		}
+		return rankedTimes;
 	}
-
+	
 	@Override
 	public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] riderScores = null;
+		try {
+			for (Race r: races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+			}
+			int[] riderRanks = getRidersRankInStage(stageId);
+			riderScores = new int[riderRanks.length];
+			for (Race r : races.values()) {
+				Stage s = r.getStage(stageId);
+				int i = 0;
+				while(i < riderRanks.length) {
+					riderScores[i] = pointMaps.getScorings(s.getStageType()).get(i);
+					i++;
+				}
+			}
+		} catch (IDNotRecognisedException e) {
+			
+		}
+		return riderScores;
 	}
 
 	@Override
@@ -389,21 +483,33 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 
 	@Override
 	public void eraseCyclingPortal() {
-		// TODO Auto-generated method stub
-
+		teams = new HashMap<Integer, Team>();
+		races = new HashMap<Integer, Race>();
 	}
 
 	@Override
-	public void saveCyclingPortal(String filename) throws IOException {
-		// TODO Auto-generated method stub
+    public void saveCyclingPortal(String filename) throws IOException {
+        FileOutputStream file = new FileOutputStream("saves/" + filename + ".ser");
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(this);
+            out.close();
+            System.out.println("Saved in /saves/" + filename);
+        } catch (IOException e) {
+            System.out.println("Save failed");
+        }
 
-	}
+    }
 
 	@Override
-	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-
-	}
+    public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
+        FileInputStream file = new FileInputStream("saves/" + filename + ".ser");
+        ObjectInputStream objInput = new ObjectInputStream(file);
+        BadMiniCyclingPortal p = (BadMiniCyclingPortal) objInput.readObject();
+        this.races = p.races;
+        this.teams = p.teams;
+        objInput.close();
+    }
 
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {

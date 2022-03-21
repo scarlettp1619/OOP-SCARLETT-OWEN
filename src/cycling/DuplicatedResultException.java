@@ -1,5 +1,7 @@
 package cycling;
 
+import java.time.LocalTime;
+
 /**
  * Each rider can only have a single result in a race. This exception is thrown
  * when attempting to create another record for the same rider in a the same
@@ -26,6 +28,12 @@ public class DuplicatedResultException extends Exception {
 	public DuplicatedResultException(String message) {
 		//rider can only have one result per race
 		super(message);
+	}
+	
+	static void checkResults(LocalTime[] riderTime) throws DuplicatedResultException {
+		if (riderTime != null) {
+			throw new DuplicatedResultException("test exception"); // this isn't done
+		}
 	}
 
 }

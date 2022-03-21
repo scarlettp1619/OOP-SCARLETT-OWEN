@@ -31,14 +31,11 @@ public class InvalidCheckpointsException extends Exception {
 		super(message);
 	}
 	
-	static void checkLength(HashMap<Integer, Race> races, int stageId, LocalTime... checkpoints) throws InvalidCheckpointsException{
-		for (Race r : races.values()) {
-			Stage tempStage = r.getStage(stageId);
-			int segments = tempStage.getSegmentIds().length + 2;
-			int check = checkpoints.length;
-			if (segments != check) {
-				throw new InvalidCheckpointsException("Length of checkpoints is invalid!");
-			}
+	static void checkLength(Stage stage, LocalTime... checkpoints) throws InvalidCheckpointsException{
+		int segments = stage.getSegmentIds().length + 2;
+		int check = checkpoints.length;
+		if (segments != check) {
+			throw new InvalidCheckpointsException("Length of checkpoints is invalid!");
 		}
 	}
 
