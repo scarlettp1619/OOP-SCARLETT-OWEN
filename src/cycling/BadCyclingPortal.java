@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -340,11 +341,11 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage tempStage = r.getStage(stageId);
 				InvalidCheckpointsException.checkLength(tempStage, checkpoints);
 				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
-				System.out.println(tempStage.getResults(riderId));
+				//System.out.println(tempStage.getResults(riderId));
 				//DuplicatedResultException.checkResults(tempStage.getResults(riderId));
 				tempStage.results.put(riderId, checkpoints);
 				r.stages.put(stageId, tempStage);
-				System.out.println(tempStage.getResults(riderId));
+				//System.out.println(tempStage.getResults(riderId));
 			}
 		} catch (IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
 			System.out.println(e);
@@ -470,6 +471,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 					} else {
 						riderScores[i] = 0;
 					}
+					i++;
 				}
 			}
 		} catch (IDNotRecognisedException e) {
@@ -479,25 +481,63 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	}
 	
 	//
-	public int[] getRidersRankInSegment(int segmentId) {
-		return null;
+	public int[][] getRidersRankInSegment(int stageId) throws IDNotRecognisedException {
+		Stage tempStage = null;
+
+		for (Race r : races.values()) {
+			tempStage = r.getStage(stageId);
+		}
+		int[][] arrayOfRiderRanks = new int[tempStage.getSegmentIds().length][tempStage.getRandomResult().length]; //2D array: Size of the array initialized to be the of the amount of segments and the amount of scores recorded per segment. This is really shitty code.
+		
+		HashMap<Integer, LocalTime> tempMap = new HashMap<Integer, LocalTime>();
+		
+		
+		
+		int j = 0; //Used as a counter to iterate through the amounts of segments
+		while (j < arrayOfRiderRanks.length) {
+			for (int riderId : tempStage.getResultsHashMap().keySet()) { 
+				tempMap.put(riderId, tempStage.getResults(riderId)[j]);
+			} //Gets a map of riderId to the j(th) SegmentTime
+			
+			RankerComparator ranker = new RankerComparator(tempMap);
+			SortedMap<Integer, LocalTime> sortedMap = new TreeMap<Integer, LocalTime>(ranker);
+			sortedMap.putAll(tempMap);
+			
+			int[] rankedRiders = Arrays.stream(sortedMap.keySet().toArray(new Integer[sortedMap.size()])).mapToInt(x -> x).toArray(); //Gets array of ranked segmentTimes
+			arrayOfRiderRanks[j] = rankedRiders; 
+			j++;
+		}
+
+		return arrayOfRiderRanks;
 	}
 	//
 
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
-		int[] rankedRiders = getRidersRankInStage(stageId);
-		int[] riderScores = new int[rankedRiders.length];
-		for (Race r : races.values()) {
+		Segment[] tempSegment = null;
+		for(Race r : races.values()) {
 			Stage s = r.getStage(stageId);
-			int i;
-			for (int riderId : rankedRiders) {
-				LocalTime[] times = s.getResults(rankedRiders[riderId]);
-				//wip
-			}
-
+			tempSegment = s.getSegmentsAsArray(); //This will return segments in the order we have entered them because of the way we have implemented segmentId counters. Eliminating the need for a LinkedHashMap.
 		}
-		return riderScores;
+		
+		int[][] riderRank = getRidersRankInSegment(stageId); //Array: segment place to array of ranks
+		int[] riderScores = new int[riderRank[1].length];
+		
+		int i = 0; //iterate through segment places
+		while(i < riderRank.length) {
+			int j = 0; //iterate through singular rider ranks
+			while(j < riderRank[i].length) {
+				if(pointMaps.getScorings(tempSegment[i].getSegmentType()).containsKey(j)) {
+					riderScores[j] = pointMaps.getScorings(tempSegment[i].getSegmentType()).get(j);
+				} else {
+					riderScores[j] = 0;
+				}
+				j++;
+			}
+			i++;
+		}
+		
+		return riderScores;	
 	}
 
 	@Override

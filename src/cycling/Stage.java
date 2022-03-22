@@ -100,12 +100,23 @@ public class Stage implements Serializable{
 		return segmentIds;
 	}
 	
+	public Segment[] getSegmentsAsArray() { //at this point im just brute forcing shit cause nothing else is working without having to overhaul the last like 6 methods fml
+		return (Segment[]) results.values().toArray();
+	}
+	
 	public HashMap<Integer, Segment> getSegment() {
 		return segments;
 	}
 	
 	public LocalTime[] getResults(int riderId) {
 		return results.get(riderId);
+	}
+	
+	public LocalTime[] getRandomResult() {
+		for (int i : results.keySet()) {
+			return results.get(i);
+		}
+		return null;
 	}
 	
 	public Integer[] getResultIds() {
