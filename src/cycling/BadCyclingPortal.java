@@ -141,15 +141,15 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
 		double stageLength = 0;
-		for (Race r : races.values()) {
-			try {
+		try {
+			for (Race r : races.values()) {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				HashMap<Integer, Stage> stages = r.getStages();
 				Stage tempStage = stages.get(stageId);
 				stageLength = tempStage.getStageLength();
-			} catch (IDNotRecognisedException e) {
-				System.out.println(e);
 			}
+		} catch (IDNotRecognisedException e) {
+				System.out.println(e);
 		}
 		return stageLength;
 	}
@@ -373,12 +373,6 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		LocalTime elapsedTime = LocalTime.of(0, 0);
 		try {
-			for (Team t : teams.values()) {
-				IDNotRecognisedException.checkID(riderId, t.getRidersId());
-			}
-			for (Race r : races.values()) {
-				IDNotRecognisedException.checkID(stageId, r.getStageIds());
-			}
 			LocalTime[] timeArray = getRiderResultsInStage(stageId, riderId);
 			for (LocalTime time : timeArray) {
 				elapsedTime = elapsedTime.plusHours(time.getHour());
@@ -438,9 +432,6 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		LocalTime[] rankedTimes = null;
 		int i = 0;
 		try {
-			for(Race r : races.values()) {
-				IDNotRecognisedException.checkID(stageId, r.getStageIds());
-			}
 			int[] rankedRiders = getRidersRankInStage(stageId);
 			rankedTimes = new LocalTime[rankedRiders.length];
 			for(int riderId : rankedRiders) {
@@ -457,12 +448,10 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
 		int[] riderScores = null;
 		try {
-			for (Race r: races.values()) {
-				IDNotRecognisedException.checkID(stageId, r.getStageIds());
-			}
 			int[] riderRanks = getRidersRankInStage(stageId);
 			riderScores = new int[riderRanks.length];
 			for (Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				Stage s = r.getStage(stageId);
 				int i = 0;
 				while(i < riderRanks.length) {
@@ -512,26 +501,33 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
 		Segment[] tempSegment = null;
-		for(Race r : races.values()) {
-			Stage s = r.getStage(stageId);
-			tempSegment = s.getSegmentsAsArray(); //This will return segments in the order we have entered them because of the way we have implemented segmentId counters. Eliminating the need for a LinkedHashMap.
-		}
+		int[] riderScores = null;
 		
-		int[][] riderRank = getRidersRankInSegment(stageId); //Array: segment place to array of ranks
-		int[] riderScores = new int[riderRank[1].length];
-		
-		int i = 0; //iterate through segment places
-		while(i < riderRank.length) {
-			int j = 0; //iterate through singular rider ranks
-			while(j < riderRank[i].length) {
-				if(pointMaps.getScorings(tempSegment[i].getSegmentType()).containsKey(j)) {
-					riderScores[j] = pointMaps.getScorings(tempSegment[i].getSegmentType()).get(j);
-				} else {
-					riderScores[j] = 0;
-				}
-				j++;
+		try {
+			for(Race r : races.values()) {
+				IDNotRecognisedException.checkID(stageId, r.getStageIds());
+				Stage s = r.getStage(stageId);
+				tempSegment = s.getSegmentsAsArray(); //This will return segments in the order we have entered them because of the way we have implemented segmentId counters. Eliminating the need for a LinkedHashMap.
 			}
-			i++;
+			
+			int[][] riderRank = getRidersRankInSegment(stageId); //Array: segment place to array of ranks
+			riderScores = new int[riderRank[1].length];
+			
+			int i = 0; //iterate through segment places
+			while(i < riderRank.length) {
+				int j = 0; //iterate through singular rider ranks
+				while(j < riderRank[i].length) {
+					if(pointMaps.getScorings(tempSegment[i].getSegmentType()).containsKey(j)) {
+						riderScores[j] = pointMaps.getScorings(tempSegment[i].getSegmentType()).get(j);
+					} else {
+						riderScores[j] = 0;
+					}
+					j++;
+				}
+				i++;
+			}
+		} catch (IDNotRecognisedException e) {
+			
 		}
 		
 		return riderScores;	
@@ -590,11 +586,17 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 
 	@Override
 	public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
-		int[] rankedRiders = getRidersGeneralClassificationRank(raceId);
-		LocalTime[] timesOfRiders = new LocalTime[rankedRiders.length];
-		
-		for (int i = 0; i < rankedRiders.length; i++) {
-			timesOfRiders[i] = getRiderTotalTime(raceId, rankedRiders[i]);
+		LocalTime[] timesOfRiders = null;
+		try {
+			IDNotRecognisedException.checkID(raceId, getRaceIds());
+			int[] rankedRiders = getRidersGeneralClassificationRank(raceId);
+			timesOfRiders = new LocalTime[rankedRiders.length];
+			
+			for (int i = 0; i < rankedRiders.length; i++) {
+				timesOfRiders[i] = getRiderTotalTime(raceId, rankedRiders[i]);
+			}
+		} catch (IDNotRecognisedException e) {
+			
 		}
 		return timesOfRiders;
 	}
