@@ -8,7 +8,7 @@ public class Team implements Serializable{
 	String teamDescription;
 	
 	HashMap<Integer, Rider> riders = new HashMap<Integer, Rider>();
-	int riderIdCounter = 0;
+	static int riderIdCounter = 0;
 	
 	public Team(String name, String description) {
 		teamName = name;

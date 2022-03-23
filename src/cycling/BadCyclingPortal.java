@@ -480,7 +480,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		return riderScores;
 	}
 	
-	//
+	//Not used in interface. Makes other parts functional.
 	public int[][] getRidersRankInSegment(int stageId) throws IDNotRecognisedException {
 		Stage tempStage = null;
 
@@ -490,9 +490,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		int[][] arrayOfRiderRanks = new int[tempStage.getSegmentIds().length][tempStage.getRandomResult().length]; //2D array: Size of the array initialized to be the of the amount of segments and the amount of scores recorded per segment. This is really shitty code.
 		
 		HashMap<Integer, LocalTime> tempMap = new HashMap<Integer, LocalTime>();
-		
-		
-		
+	
 		int j = 0; //Used as a counter to iterate through the amounts of segments
 		while (j < arrayOfRiderRanks.length) {
 			for (int riderId : tempStage.getResultsHashMap().keySet()) { 
@@ -510,7 +508,6 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 
 		return arrayOfRiderRanks;
 	}
-	//
 
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
@@ -593,26 +590,119 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 
 	@Override
 	public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		int[] rankedRiders = getRidersGeneralClassificationRank(raceId);
+		LocalTime[] timesOfRiders = new LocalTime[rankedRiders.length];
+		
+		for (int i = 0; i < rankedRiders.length; i++) {
+			timesOfRiders[i] = getRiderTotalTime(raceId, rankedRiders[i]);
+		}
+		return timesOfRiders;
+	}
+	
+	//Not used in interface. Just here for functionality
+	public int getRiderTotalPoints(int raceId, int riderId) {
+		int totalPoints = 0;
+		for(int stageId : races.get(raceId).getStages().keySet()) {
+			try { //Needs try-catch because getRidersRankInStage throws IDNotRecognisedException
+				int[] rankedRiders = getRidersRankInStage(stageId);
+				int[] riderPoints = getRidersPointsInStage(stageId);
+				for(int i = 0; i < rankedRiders.length; i++) {
+					try {
+						assert rankedRiders[i] == riderId;
+						totalPoints = totalPoints + riderPoints[i];
+					} catch (AssertionError e) {
+						System.out.println(e);
+					}
+				}
+			} catch (IDNotRecognisedException e) {
+				
+			}
+		}
+		return totalPoints;
+	}
+	
+	//Not used in interface. Just here for functionality
+		public int getRiderTotalMountainPoints(int raceId, int riderId) { //Exact same functionality as the one
+			int totalPoints = 0;
+			for(int stageId : races.get(raceId).getStages().keySet()) {
+				try { //Needs try-catch because getRidersRankInStage throws IDNotRecognisedException
+					int[] rankedRiders = getRidersRankInStage(stageId);
+					int[] riderPoints = getRidersMountainPointsInStage(stageId);
+					for(int i = 0; i < rankedRiders.length; i++) {
+						try {
+							assert rankedRiders[i] == riderId;
+							totalPoints = totalPoints + riderPoints[i];
+						} catch (AssertionError e) {
+							System.out.println(e);
+						}
+					}
+				} catch (IDNotRecognisedException e) {
+					
+				}
+			}
+			return totalPoints;
+		}
+	
+	
+	@Override
+	public int[] getRidersPointsInRace(int raceId) throws IDNotRecognisedException {  //Works the exact same as getGeneralClassificationTimesInRace
+		int[] rankedRiders = getRidersGeneralClassificationRank(raceId);
+		int[] pointsOfRiders = new int[rankedRiders.length];
+		
+		for (int i = 0; i < rankedRiders.length; i++) {
+			pointsOfRiders[i] = getRiderTotalPoints(raceId, rankedRiders[i]);
+		}
+		
+		return pointsOfRiders;
 	}
 
 	@Override
-	public int[] getRidersPointsInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+	public int[] getRidersMountainPointsInRace(int raceId) throws IDNotRecognisedException { //Works the exact same as getRidersPointsInRace
+		int[] rankedRiders = getRidersGeneralClassificationRank(raceId);
+		int[] pointsOfRiders = new int[rankedRiders.length];
+		
+		for (int i = 0; i < rankedRiders.length; i++) {
+			pointsOfRiders[i] = getRiderTotalMountainPoints(raceId, rankedRiders[i]);
+		}
+		
+		return pointsOfRiders;
 	}
+	
+	//Not used in interface. Just here for functionality.
+	public LocalTime getRiderTotalTime(int raceId, int riderId) throws IDNotRecognisedException{
+		LocalTime totalTime = LocalTime.of(0, 0, 0, 0);
 
-	@Override
-	public int[] getRidersMountainPointsInRace(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for(int stageId : races.get(raceId).getStages().keySet()) {
+			try {
+				IDNotRecognisedException.checkID(riderId, races.get(raceId).getStage(stageId).getResultsHashMap().keySet().stream().mapToInt(i->i).toArray()); //Has to change from Integer[] to primitive int[] to compare. Long ass code
+				LocalTime addedTime = getRiderAdjustedElapsedTimeInStage(stageId, riderId);
+				totalTime = totalTime.plusHours(addedTime.getHour());
+				totalTime = totalTime.plusSeconds(addedTime.getSecond());
+				totalTime = totalTime.plusMinutes(addedTime.getMinute());
+				totalTime = totalTime.plusNanos(addedTime.getNano());
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
+			}
+		}
+		return totalTime;
 	}
 
 	@Override
 	public int[] getRidersGeneralClassificationRank(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<Integer, LocalTime> tempMap = new HashMap<Integer, LocalTime>();
+		
+		for(Stage s : races.get(raceId).getStages().values()) {
+			for(int riderId : s.getResultsHashMap().keySet()) {
+				tempMap.put(riderId, getRiderTotalTime(raceId, riderId));
+			}
+		}
+		
+		RankerComparator ranker = new RankerComparator(tempMap);
+		TreeMap<Integer, LocalTime> sortedMap = new TreeMap<Integer, LocalTime>(ranker);
+		sortedMap.putAll(tempMap);
+		
+		int[] rankedRiders = Arrays.stream(sortedMap.keySet().toArray(new Integer[sortedMap.size()])).mapToInt(i -> i).toArray();
+		return rankedRiders;
 	}
 
 	@Override
