@@ -30,7 +30,6 @@ public class IDNotRecognisedException extends Exception {
 	}
 	
 	static void checkID(int Ids, int[] arrayOfIds) throws IDNotRecognisedException {
-		boolean found = false;
 		boolean containsID = IntStream.of(arrayOfIds).anyMatch(x -> x == Ids);
 		for (int i = 0; i <= arrayOfIds.length - 1; i++) {
 			if (!containsID) {

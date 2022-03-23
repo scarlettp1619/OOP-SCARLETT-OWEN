@@ -83,6 +83,7 @@ public class CyclingPortalInterfaceTestApp {
 		System.out.println("stages in 2 " + Arrays.toString(portal.getRaceStages(2)));
 		
 		System.out.println("stage length of 1 " + portal.getStageLength(1));
+		System.out.println("stage length of 7 " + portal.getStageLength(7));
 		// IDNotRecognisedException not working properly here
 		
 		portal.removeStageById(0);

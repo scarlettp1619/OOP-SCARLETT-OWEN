@@ -58,7 +58,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			races.put(raceIdCounter, tempRace);
 			raceIdCounter++;
 		} catch (IllegalNameException | InvalidNameException e) {
-			System.out.println(e);
+			
 		}
 		return raceIdCounter-1;
 	}
@@ -71,7 +71,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			Race tempRace = races.get(raceId);
 			details = tempRace.getDescription();
 		} catch (IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return details;
 	}
@@ -86,7 +86,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			 * Results are stored with the riders
 			 * addResults() ----- */
 		} catch (IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		} 
 	}
 
@@ -98,7 +98,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			Race tempRace = races.get(raceId);
 			stages = tempRace.getStageIds().length;
 		} catch (IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return stages;
 	}
@@ -120,7 +120,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			returnStageId = tempRace.addStage(stageName, description, length, startTime, type);
 			races.put(raceId, tempRace);
 		} catch (IDNotRecognisedException | IllegalNameException | InvalidNameException | InvalidLengthException e){
-			System.out.println(e);
+			
 		}
 		return returnStageId;
 	}
@@ -133,7 +133,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			Race tempRace = races.get(raceId);
 			stageIds = tempRace.getStageIds();
 		} catch(IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return stageIds;
 	}
@@ -141,15 +141,16 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
 		double stageLength = 0;
-		try {
-			for (Race r : races.values()) {
+		for (Race r : races.values()) {
+			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				HashMap<Integer, Stage> stages = r.getStages();
 				Stage tempStage = stages.get(stageId);
 				stageLength = tempStage.getStageLength();
+				return stageLength;
+			} catch (IDNotRecognisedException e) {
+				
 			}
-		} catch (IDNotRecognisedException e) {
-				System.out.println(e);
 		}
 		return stageLength;
 	}
@@ -160,8 +161,9 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				r.removeStage(stageId);
+				break;
 			} catch (IDNotRecognisedException e) {
-				System.out.println(e);
+				
 			}
 		}
 	}
@@ -180,8 +182,9 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				InvalidStageTypeException.checkStageType(tempStage);
 				segmentId = tempStage.addSegment(location, type, averageGradient, length);
 				r.stages.put(stageId, tempStage);
+				return segmentId;
 			} catch (IDNotRecognisedException | InvalidLocationException | InvalidStageStateException | InvalidStageTypeException e) {
-				System.out.println(e);
+				
 			}
 		}
 		return segmentId;
@@ -201,7 +204,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				segmentId = tempStage.addSprint(location);
 				r.stages.put(stageId, tempStage);
 			} catch (IDNotRecognisedException | InvalidLocationException | InvalidStageStateException | InvalidStageTypeException e) {
-				System.out.println(e);
+				
 			}
 		}
 		return segmentId;
@@ -216,7 +219,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 					InvalidStageStateException.checkStageState(s, s.getStageState());
 					s.removeSegment(segmentId);	
 				} catch (IDNotRecognisedException | InvalidStageStateException e) {
-					System.out.println(e);
+					
 				}
 			}
 		}
@@ -232,7 +235,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				tempStage.setStageState(StageState.WAITING_FOR_RESULTS);
 				r.stages.put(stageId, tempStage);
 			} catch(IDNotRecognisedException | InvalidStageStateException e) {
-				System.out.println(e);
+				
 			}
 		}
 	}
@@ -246,7 +249,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage tempStage = r.getStage(stageId);
 				segIds = tempStage.getSegmentIds();
 			} catch(IDNotRecognisedException e) {
-				System.out.println(e);
+				
 			}
 		}
 		return segIds;
@@ -263,7 +266,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			teams.put(teamIdCounter, tempTeam);
 			teamIdCounter++;
 			} catch (IllegalNameException | InvalidNameException e) {
-				System.out.println(e);
+				
 		}
 		return teamIdCounter-1;
 	}
@@ -274,7 +277,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			IDNotRecognisedException.checkID(teamId, getTeams());
 			teams.remove(teamId);
 		} catch (IDNotRecognisedException e){
-			System.out.println(e);
+			
 		}
 
 	}
@@ -298,7 +301,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			Team tempTeam = teams.get(teamId);
 			riderIds = tempTeam.getRidersId();
 		} catch (IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return riderIds;
 	}
@@ -313,7 +316,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			returnTeamId = tempTeam.addRider(name, yearOfBirth);
 			teams.put(teamID, tempTeam);
 		} catch(IDNotRecognisedException | IllegalArgumentException e) {
-			System.out.println(e);
+			
 		}
 		return returnTeamId;
 	}
@@ -325,7 +328,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				IDNotRecognisedException.checkID(riderId, t.getRidersId());
 				t.removeRiders(riderId);
 			} catch (IDNotRecognisedException e) {
-				System.out.println(e);
+				
 			}
 		}
 	}
@@ -348,7 +351,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				//System.out.println(tempStage.getResults(riderId));
 			}
 		} catch (IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
-			System.out.println(e);
+			
 		}
 	}
 
@@ -365,7 +368,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				stageTimes = tempStage.getResults(riderId);
 			}
 		} catch (IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return stageTimes;
 	}
@@ -381,7 +384,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				elapsedTime = elapsedTime.plusNanos(time.getNano());
 			}
 		} catch(IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return elapsedTime;
 	}
@@ -399,7 +402,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				r.stages.put(stageId, tempStage);
 			}
 		} catch(IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 	}
 
@@ -411,7 +414,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				tempStage = r.getStage(stageId);	
 			} catch(IDNotRecognisedException e) {
-				System.out.println(e);
+				
 			}
 		}
 		HashMap<Integer, LocalTime> tempMap = new HashMap<Integer, LocalTime>();
@@ -439,7 +442,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				i++;
 			}
 		} catch(IDNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 		return rankedTimes;
 	}
@@ -579,7 +582,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			NameNotRecognisedException.checkName(name, checkNames);
 			races.remove(raceId);
 		} catch (NameNotRecognisedException e) {
-			System.out.println(e);
+			
 		}
 
 	}
@@ -613,7 +616,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 						assert rankedRiders[i] == riderId;
 						totalPoints = totalPoints + riderPoints[i];
 					} catch (AssertionError e) {
-						System.out.println(e);
+						
 					}
 				}
 			} catch (IDNotRecognisedException e) {
@@ -635,7 +638,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 							assert rankedRiders[i] == riderId;
 							totalPoints = totalPoints + riderPoints[i];
 						} catch (AssertionError e) {
-							System.out.println(e);
+							
 						}
 					}
 				} catch (IDNotRecognisedException e) {
@@ -683,7 +686,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				totalTime = totalTime.plusMinutes(addedTime.getMinute());
 				totalTime = totalTime.plusNanos(addedTime.getNano());
 			} catch (IDNotRecognisedException e) {
-				System.out.println(e);
+				
 			}
 		}
 		return totalTime;
