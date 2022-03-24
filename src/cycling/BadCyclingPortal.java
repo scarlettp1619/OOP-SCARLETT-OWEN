@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 
 /**
@@ -140,19 +141,17 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 
 	@Override
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		double stageLength = 0;
 		for (Race r : races.values()) {
 			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				HashMap<Integer, Stage> stages = r.getStages();
 				Stage tempStage = stages.get(stageId);
-				stageLength = tempStage.getStageLength();
-				return stageLength;
+				return tempStage.getStageLength();
 			} catch (IDNotRecognisedException e) {
 				
 			}
 		}
-		return stageLength;
+		return 0;
 	}
 
 	@Override
@@ -203,6 +202,7 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				InvalidStageTypeException.checkStageType(tempStage);
 				segmentId = tempStage.addSprint(location);
 				r.stages.put(stageId, tempStage);
+				break;
 			} catch (IDNotRecognisedException | InvalidLocationException | InvalidStageStateException | InvalidStageTypeException e) {
 				System.out.println(e);
 			}
@@ -229,30 +229,37 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
 		for (Race r : races.values()) {
 			try {
-				IDNotRecognisedException.checkID(stageId, r.getStageIds());
-				Stage tempStage = r.getStage(stageId);
-				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
-				tempStage.setStageState(StageState.WAITING_FOR_RESULTS);
-				r.stages.put(stageId, tempStage);
-			} catch(IDNotRecognisedException | InvalidStageStateException e) {
+				if (Arrays.stream(r.getStageIds()).anyMatch(i -> i == stageId)) {
+					Stage tempStage = r.getStage(stageId);
+					InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
+					tempStage.setStageState(StageState.WAITING_FOR_RESULTS);
+					r.stages.put(stageId, tempStage);
+					return;
+				}
+			} catch(InvalidStageStateException e) {
 				System.out.println(e);
 			}
+		}
+		
+		try {
+			throw new IDNotRecognisedException("ID \"" + stageId + "\" does not match any IDs!"); //Should be unreachable unless StagePrep couldn't be ran.
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
 		}
 	}
 
 	@Override
 	public int[] getStageSegments(int stageId) throws IDNotRecognisedException {
-		int[] segIds = null;
 		for (Race r : races.values()) {
 			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				Stage tempStage = r.getStage(stageId);
-				segIds = tempStage.getSegmentIds();
+				return tempStage.getSegmentIds();
 			} catch(IDNotRecognisedException e) {
 				System.out.println(e);
 			}
 		}
-		return segIds;
+		return null;
 	}
 
 	@Override
@@ -265,8 +272,9 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 			Team tempTeam = new Team(name, description);
 			teams.put(teamIdCounter, tempTeam);
 			teamIdCounter++;
+			System.out.println("Team Created. Name: " + name + ", Description: " + description);
 			} catch (IllegalNameException | InvalidNameException e) {
-				System.out.println(e);
+				System.out.println("Team cannot be created");
 		}
 		return teamIdCounter-1;
 	}
@@ -324,17 +332,20 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
 		for (Team t : teams.values()) {
-			try {
-				IDNotRecognisedException.checkID(riderId, t.getRidersId());
+			if (Arrays.stream(t.getRidersId()).anyMatch(i -> i == riderId)) {
 				t.removeRiders(riderId);
-			} catch (IDNotRecognisedException e) {
-				System.out.println(e);
+				return;
 			}
+		}
+		try {
+			throw new IDNotRecognisedException("ID \"" + riderId + "\" does not match any IDs!"); //Should be unreachable unless t.removeRider couldn't be ran.
+		} catch(IDNotRecognisedException e) {
+			System.out.println(e);
 		}
 	}
 	
 	@Override
-	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException, InvalidStageStateException {
+	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException, InvalidStageStateException { //To Be Fixed. Prematurely throwing an exception. Runs as intended except for IDNotRecognisedException.
 		try {
 			for (Team t : teams.values()) {
 				IDNotRecognisedException.checkID(riderId, t.getRidersId());
@@ -344,11 +355,8 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 				Stage tempStage = r.getStage(stageId);
 				InvalidCheckpointsException.checkLength(tempStage, checkpoints);
 				InvalidStageStateException.checkStageState(tempStage, tempStage.getStageState());
-				//System.out.println(tempStage.getResults(riderId));
-				//DuplicatedResultException.checkResults(tempStage.getResults(riderId));
 				tempStage.results.put(riderId, checkpoints);
 				r.stages.put(stageId, tempStage);
-				//System.out.println(tempStage.getResults(riderId));
 			}
 		} catch (IDNotRecognisedException | InvalidCheckpointsException | InvalidStageStateException e) {
 			System.out.println(e);
@@ -477,7 +485,9 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 		Stage tempStage = null;
 
 		for (Race r : races.values()) {
-			tempStage = r.getStage(stageId);
+			if(Arrays.stream(r.getStageIds()).anyMatch(i -> i == stageId)){
+				tempStage = r.getStage(stageId);
+			}
 		}
 		int[][] arrayOfRiderRanks = new int[tempStage.getSegmentIds().length][tempStage.getRandomResult().length]; //2D array: Size of the array initialized to be the of the amount of segments and the amount of scores recorded per segment. This is really shitty code.
 		
@@ -504,35 +514,33 @@ public class BadCyclingPortal implements CyclingPortalInterface {
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
 		Segment[] tempSegment = null;
-		int[] riderScores = null;
 		
-		try {
-			for(Race r : races.values()) {
+		for(Race r : races.values()) {
+			try {
 				IDNotRecognisedException.checkID(stageId, r.getStageIds());
 				Stage s = r.getStage(stageId);
 				tempSegment = s.getSegmentsAsArray(); //This will return segments in the order we have entered them because of the way we have implemented segmentId counters. Eliminating the need for a LinkedHashMap.
+			} catch (IDNotRecognisedException e) {
+				System.out.println(e);
 			}
-			
-			int[][] riderRank = getRidersRankInSegment(stageId); //Array: segment place to array of ranks
-			riderScores = new int[riderRank[1].length];
-			
-			int i = 0; //iterate through segment places
-			while(i < riderRank.length) {
-				int j = 0; //iterate through singular rider ranks
-				while(j < riderRank[i].length) {
-					if(pointMaps.getScorings(tempSegment[i].getSegmentType()).containsKey(j)) {
-						riderScores[j] = pointMaps.getScorings(tempSegment[i].getSegmentType()).get(j);
-					} else {
-						riderScores[j] = 0;
-					}
-					j++;
-				}
-				i++;
-			}
-		} catch (IDNotRecognisedException e) {
-			
 		}
-		
+			
+		int[][] riderRank = getRidersRankInSegment(stageId); //Array: segment place to array of ranks
+		int[] riderScores = new int[riderRank[0].length];
+			
+		int i = 0; //iterate through segment places
+		while(i < riderRank.length) {
+			int j = 0; //iterate through singular rider ranks
+			while(j < riderRank[i].length) {
+				if(pointMaps.getScorings(tempSegment[i].getSegmentType()).containsKey(j)) {
+					riderScores[j] = pointMaps.getScorings(tempSegment[i].getSegmentType()).get(j);
+				} else {
+					riderScores[j] = 0;
+				}
+				j++;
+			}
+			i++;
+		}
 		return riderScores;	
 	}
 

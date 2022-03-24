@@ -101,7 +101,7 @@ public class Stage implements Serializable{
 	}
 	
 	public Segment[] getSegmentsAsArray() { //at this point im just brute forcing shit cause nothing else is working without having to overhaul the last like 6 methods fml
-		return (Segment[]) results.values().toArray();
+		return segments.values().toArray(new Segment[0]);
 	}
 	
 	public HashMap<Integer, Segment> getSegment() {

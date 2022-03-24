@@ -84,26 +84,23 @@ public class CyclingPortalInterfaceTestApp {
 		
 		System.out.println("stage length of 1 " + portal.getStageLength(1));
 		System.out.println("stage length of 7 " + portal.getStageLength(7));
-		// IDNotRecognisedException not working properly here
 		
 		portal.removeStageById(0);
-		// IDNotRecognisedException not working properly here
 		
 		System.out.println("number of stages in 1 " + portal.getNumberOfStages(1));
 		System.out.println("stages in 1 " + Arrays.toString(portal.getRaceStages(1)));
 		
 		portal.addCategorizedClimbToStage(1, 2.0, SegmentType.C1, 2.0, 5.0);
 		portal.addIntermediateSprintToStage(1, 3.0);
-		// IDNotRecognisedException not working properly here
 		
 		System.out.println("segment ids " +Arrays.toString(portal.getStageSegments(1)));
-		// IDNotRecognisedException not working properly here
 		
 		portal.removeSegment(1);
 		System.out.println("segment ids " +Arrays.toString(portal.getStageSegments(1)));
 		
-		portal.concludeStagePreparation(0);
-		// IDNotRecognisedException not working properly here
+		System.out.println(Arrays.toString(portal.getRaceStages(2)));
+		portal.concludeStagePreparation(5);
+		//
 		
 		portal.createTeam("teamepic", "the epic team");
 		portal.createTeam("teamepic2", "the epic team (two)");
@@ -119,6 +116,7 @@ public class CyclingPortalInterfaceTestApp {
 		portal.createRider(2, "jeff3", 1986);
 		System.out.println(Arrays.toString(portal.getTeamRiders(0)));
 		System.out.println(Arrays.toString(portal.getTeamRiders(2)));
+		
 		// IDNotRecognisedException not working properly here
 		// fuck it i'm gonna stop with these comments none of the idnotrecognised works
 		
@@ -150,7 +148,7 @@ public class CyclingPortalInterfaceTestApp {
 		
 		System.out.println(Arrays.toString(portal.getRidersPointsInStage(1)));
 		
-		// System.out.println(portal.getRidersMountainPointsInStage(1));
+		 System.out.println(Arrays.toString(portal.getRidersMountainPointsInStage(1)));
 		// Exception in thread "main" java.lang.ClassCastException: class [Ljava.lang.Object; cannot be cast
 		// to class [Lcycling.Segment; ([Ljava.lang.Object; is in module java.base of loader 'bootstrap';
 		// [Lcycling.Segment; is in unnamed module of loader 'app')

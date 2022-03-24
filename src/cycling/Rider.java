@@ -16,7 +16,7 @@ public class Rider implements Serializable{
 	public Rider(String name, int yob) {
 		riderName = name;
 		yearOfBirth = yob;
-		System.out.println("Rider has been constructed.");
+		System.out.println("Rider has been constructed. Name: " + name + ", YOB: " + yob);
 	}
 	
 	//Name
