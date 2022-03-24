@@ -1,6 +1,7 @@
 package cycling;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 
 /**
  * Each rider can only have a single result in a race. This exception is thrown
@@ -32,7 +33,7 @@ public class DuplicatedResultException extends Exception {
 	
 	static void checkResults(LocalTime[] riderTime) throws DuplicatedResultException {
 		if (riderTime != null) {
-			throw new DuplicatedResultException("test exception"); // this isn't done
+			throw new DuplicatedResultException("Rider already has results in stage!"); // this isn't done
 		}
 	}
 

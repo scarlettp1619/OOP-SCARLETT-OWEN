@@ -133,6 +133,7 @@ public class CyclingPortalInterfaceTestApp {
 		LocalTime regTime4 = LocalTime.of(0, 11, 0, 0);
 		LocalTime regTime5 = LocalTime.of(0, 13, 0, 0);
 		
+		System.out.println("about to register results for rider 1 in stage");
 		portal.registerRiderResultsInStage(1, 1, regTime0, regTime1, regTime2);
 		System.out.println(Arrays.toString(portal.getRiderResultsInStage(1, 1)));
 		System.out.println(portal.getRiderAdjustedElapsedTimeInStage(1, 1));
@@ -140,7 +141,12 @@ public class CyclingPortalInterfaceTestApp {
 		portal.deleteRiderResultsInStage(1, 1);
 		System.out.println(Arrays.toString(portal.getRiderResultsInStage(1, 1)));
 		
+		System.out.println("about to register results for rider 1 in stage");
 		portal.registerRiderResultsInStage(1, 1, regTime0, regTime1, regTime2);
+		System.out.println("registered rider results for rider 1 in stage");
+		portal.registerRiderResultsInStage(1, 1, regTime3, regTime4, regTime5);
+		System.out.println(Arrays.toString(portal.getRiderResultsInStage(1, 1)));
+		System.out.println("registered rider results for rider 2 in stage");
 		portal.registerRiderResultsInStage(1, 2, regTime3, regTime4, regTime5);
 		
 		System.out.println(Arrays.toString(portal.getRidersRankInStage(1)));
