@@ -34,9 +34,7 @@ public class IllegalNameException extends Exception {
 	
 	static void checkName(String name, String checkName) throws IllegalNameException {
 		if (name == checkName) {
-			// if name already exists
 			throw new IllegalNameException("Name already exists!");
-			// throw exception
 		}
 	}
 
