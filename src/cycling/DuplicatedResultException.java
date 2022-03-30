@@ -33,7 +33,9 @@ public class DuplicatedResultException extends Exception {
 	
 	static void checkResults(LocalTime[] riderTime) throws DuplicatedResultException {
 		if (riderTime != null) {
-			throw new DuplicatedResultException("Rider already has results in stage!"); // this isn't done
+			// if rider already has a time
+			throw new DuplicatedResultException("Rider already has results in stage!");
+			// throw exception stating rider already has result
 		}
 	}
 

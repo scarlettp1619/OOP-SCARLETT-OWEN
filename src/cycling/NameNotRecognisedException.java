@@ -32,7 +32,9 @@ public class NameNotRecognisedException extends Exception {
 	
 	static void checkName(String name, ArrayList<String> checkNames) throws NameNotRecognisedException{
 		if (!checkNames.contains(name)) {
-			throw new NameNotRecognisedException("Race name doesn't exist!"); 
+			// if name doesn't exist (for remove race by name)
+			throw new NameNotRecognisedException("Race name doesn't exist!");
+			// throw exception
 		}
 	}
 

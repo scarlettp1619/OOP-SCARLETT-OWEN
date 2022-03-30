@@ -31,7 +31,9 @@ public class InvalidNameException extends Exception {
 
 	static void checkName(String type, String name) throws InvalidNameException {
 		if (name == null || name.length() > 30 || name.isEmpty() || name.contains(" ")) {
+			// if name doesn't fill requirements
 				throw new InvalidNameException(type +  " name \"" + name + "\" is invalid!");
+				// throw exception
 		}
 	}
 }

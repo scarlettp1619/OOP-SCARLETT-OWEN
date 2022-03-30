@@ -33,9 +33,13 @@ public class InvalidCheckpointsException extends Exception {
 	
 	static void checkLength(Stage stage, LocalTime... checkpoints) throws InvalidCheckpointsException{
 		int segments = stage.getSegmentIds().length + 2;
+		// get segment length + 2 (start & finish)
 		int check = checkpoints.length;
+		// get number of checkpoints
 		if (segments != check) {
+			// if checkpoints don't match segments
 			throw new InvalidCheckpointsException("Length of checkpoints is invalid!");
+			// throw exception
 		}
 	}
 

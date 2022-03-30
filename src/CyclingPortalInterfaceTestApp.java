@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 
-import cycling.BadCyclingPortal;
-import cycling.BadMiniCyclingPortal;
+import cycling.CyclingPortal;
+import cycling.MiniCyclingPortal;
 import cycling.CyclingPortalInterface;
 import cycling.DuplicatedResultException;
 import cycling.IDNotRecognisedException;
@@ -50,7 +50,7 @@ public class CyclingPortalInterfaceTestApp {
 	public static void main(String[] args) throws IllegalNameException, InvalidNameException, IDNotRecognisedException, InvalidLengthException, InvalidLocationException, InvalidStageStateException, InvalidStageTypeException, DuplicatedResultException, InvalidCheckpointsException, NameNotRecognisedException {
 		System.out.println("The system compiled and started the execution... \n");
 
-		CyclingPortalInterface portal = new BadCyclingPortal();
+		CyclingPortalInterface portal = new CyclingPortal();
 		LocalDateTime testTime = LocalDateTime.of(0, 1, 1, 0, 0);
 		
 		portal.createRace("Race1", "epicrace");
@@ -188,7 +188,7 @@ public class CyclingPortalInterfaceTestApp {
 	}
 	
 	static void createTestSave(String saveName) {
-		CyclingPortalInterface portal = new BadCyclingPortal();
+		CyclingPortalInterface portal = new CyclingPortal();
 		LocalDateTime testTime = LocalDateTime.of(0, 1, 1, 0, 0);
 		LocalTime regTime = LocalTime.of(1, 1, 1, 1);
 		LocalTime regTime2 = LocalTime.of(2, 2, 2, 2);

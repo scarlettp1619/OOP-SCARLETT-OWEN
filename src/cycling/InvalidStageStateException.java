@@ -29,7 +29,9 @@ public class InvalidStageStateException extends Exception {
 	
 	static void checkStageState(Stage stage, StageState stageState) throws InvalidStageStateException {
 		if(stage.getStageState() != stageState) {
+			// if current stage state doesn't match required stage state
 			throw new InvalidStageStateException("Invalid stage state!");
+			// throw exception
 		}
 	}
 }

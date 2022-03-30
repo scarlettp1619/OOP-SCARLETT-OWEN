@@ -31,9 +31,13 @@ public class IDNotRecognisedException extends Exception {
 	
 	static void checkID(int Ids, int[] arrayOfIds) throws IDNotRecognisedException {
 		boolean containsID = IntStream.of(arrayOfIds).anyMatch(x -> x == Ids);
+		// boolean to check if ID exists
 		for (int i = 0; i <= arrayOfIds.length - 1; i++) {
+			// iterate through IDs
 			if (!containsID) {
+				// if ID does not exist
 				throw new IDNotRecognisedException("ID \"" + Ids + "\" does not match any IDs!");
+				// throw exception
 			}
 		}
 	}

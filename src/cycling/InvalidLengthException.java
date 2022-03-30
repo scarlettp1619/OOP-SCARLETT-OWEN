@@ -27,7 +27,9 @@ public class InvalidLengthException extends Exception {
 	
 	static void checkLength(Double length) throws InvalidLengthException{
 		if (length < 5.0 || length == null) {
+			// if length < 5km or no length is entered
 			throw new InvalidLengthException("Stage length of \"" + length + "\" is too short!");
+			// throw exception
 		}
 	}
 

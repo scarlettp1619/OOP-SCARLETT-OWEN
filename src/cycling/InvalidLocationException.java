@@ -28,7 +28,9 @@ public class InvalidLocationException extends Exception {
 	
 	static void checkLocation(Double location, Double stageLength) throws InvalidLocationException {
 		if(location <= 0 || location > stageLength) {
+			// if location is less than (or equal to) 0 or location is greater than stage length itself
 			throw new InvalidLocationException("Location is invalid");
+			// throw exception
 		}
 	}
 

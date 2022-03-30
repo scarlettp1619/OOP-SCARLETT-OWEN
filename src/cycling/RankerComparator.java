@@ -9,6 +9,7 @@ import java.util.Map;
 public class RankerComparator implements Comparator<Integer> {
 	
 	Map<Integer, LocalTime> compareMap;
+	// creates new localTime map
 	
 	public RankerComparator(Map<Integer, LocalTime> map) {
 		compareMap = map;
@@ -17,6 +18,7 @@ public class RankerComparator implements Comparator<Integer> {
 	@Override
 	public int compare(Integer rider1, Integer rider2) {
 		long timeDiff = Duration.between(compareMap.get(rider1), compareMap.get(rider2)).toNanos();
+		// get time difference between two rider times
 		if(timeDiff > 0) {
 			return -1;
 		}else {

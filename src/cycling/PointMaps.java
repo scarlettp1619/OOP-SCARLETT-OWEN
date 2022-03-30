@@ -13,6 +13,7 @@ public class PointMaps {
 		put(8, 8); put(9, 7); put(10, 6); put(11, 5);
 		put(12, 4); put(13, 3); put(14, 2);
 	}};
+	// sets points for flat finish scores
 	
 	HashMap<Integer, Integer> hillyFinishScores = new HashMap<Integer, Integer>(){{
 		put(0, 30); put(1, 25); put(2, 22); put(3, 19); 
@@ -20,6 +21,7 @@ public class PointMaps {
 		put(8, 9); put(9, 7); put(10, 6); put(11, 5);
 		put(12, 4); put(13, 3); put(14, 2);
 	}};
+	// sets points for hilly finish scores
 	
 	HashMap<Integer, Integer> highFinishScores = new HashMap<Integer, Integer>(){{ //same scorings as time trial
 		put(0, 20); put(1, 17); put(2, 15); put(3, 13); 
@@ -27,6 +29,7 @@ public class PointMaps {
 		put(8, 7); put(9, 6); put(10, 5); put(11, 4);
 		put(12, 3); put(13, 2); put(14, 1);
 	}};
+	// sets points for high finish scores
 	
 	HashMap<Integer, Integer> c4Scores = new HashMap<Integer, Integer>(){{
 		put(0, 1);

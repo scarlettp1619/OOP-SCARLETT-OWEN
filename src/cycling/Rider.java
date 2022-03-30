@@ -8,41 +8,50 @@ public class Rider implements Serializable{
 	
 	String riderName;
 	int yearOfBirth;
+	// initialises rider attributes
 	
 	//HashMap<Integer, LocalTime> stageTimes = new HashMap<Integer, LocalTime>(); //HashMap of stage Id and time (in seconds) to complete for stage
-	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); //HashMap of segment Id and time for that score segment
-	HashMap<Integer, HashMap<Integer, LocalTime>> timeScores = new HashMap<Integer, HashMap<Integer, LocalTime>>(); //HashMap of segment Id and time for that mountain segment
-	
+	HashMap<Integer, LocalTime> segmentTimes = new HashMap<Integer, LocalTime>(); // hashMap of segment Id and time for that score segment
+	HashMap<Integer, HashMap<Integer, LocalTime>> timeScores = new HashMap<Integer, HashMap<Integer, LocalTime>>(); // hashMap of segment Id and time for that mountain segment
+
+	// Constructor
 	public Rider(String name, int yob) {
 		riderName = name;
 		yearOfBirth = yob;
+		// sets rider attributes
 		System.out.println("Rider has been constructed. Name: " + name + ", YOB: " + yob);
 	}
 	
 	//Name
 	public String getRiderName() {
 		return riderName;
+		// returns rider name attribute
 	}
 	
 	
 	//YOB
 	public int getYOB() {
 		return yearOfBirth;
+		// returns year of birth attribute
 	}
 	
 	//Scores
 	public void addSegmentScore(int stageId, int segmentId, LocalTime score) {
 		HashMap<Integer, LocalTime> tempScore = timeScores.get(stageId);
+		// gets score from stageID based on current rider
 		tempScore.put(segmentId, score);
+		// puts score  into score hashmap
 		timeScores.put(stageId, tempScore);
 	}
 	
 	public LocalTime[] getSegmentScore(int stageId) {
 		return timeScores.get(stageId).values().toArray(new LocalTime[0]);
+		// returns segment score for rider
 	}
 	
 	public void removeStageScore(int stageId) {
 		timeScores.remove(stageId);
+		// removes stage score for rider
 	}
 	
 	

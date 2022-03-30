@@ -17,7 +17,7 @@ import java.util.TreeMap;
  *
  */
 @SuppressWarnings("serial")
-public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
+public class MiniCyclingPortal implements MiniCyclingPortalInterface {
 	
 	HashMap<Integer, Race> races = new HashMap<Integer, Race>();
 	static int raceIdCounter = 0;
@@ -442,7 +442,7 @@ public class BadMiniCyclingPortal implements MiniCyclingPortalInterface {
     public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream("saves/" + filename + ".ser");
         ObjectInputStream objInput = new ObjectInputStream(file);
-        BadMiniCyclingPortal p = (BadMiniCyclingPortal) objInput.readObject();
+        MiniCyclingPortal p = (MiniCyclingPortal) objInput.readObject();
         this.races = p.races;
         this.teams = p.teams;
         objInput.close();
